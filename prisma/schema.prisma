@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+// CREATE EXTENSION IF NOT EXISTS pg_hashids;
+// CREATE SEQUENCE contests_id_seq AS integer;
+// CREATE SEQUENCE submissions_id_seq AS integer;
+// CREATE SEQUENCE users_id_seq AS integer;
+// ALTER SEQUENCE contests_id_seq OWNED BY contests.id;
+// ALTER SEQUENCE submissions_id_seq OWNED BY submissions.id;
+// ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Contest {
+  id             String                @id @default(dbgenerated("id_encode(nextval('contests_id_seq'::text))"))
+  name           String
+  // channelId      String  @unique
+  description    String?
+  isOpen         Boolean               @default(true) @map("is_open")
+  picturesOnly   Boolean               @default(false) @map("pictures_only")
+  maxSubmissions Int                   @default(1) @map("max_submissions")
+  participants   ContestParticipants[]
+  submissions    Submission[]
+
+  @@map("contests")
+}
+
+model Submission {
+  id        String   @id @default(dbgenerated("id_encode(nextval('submissions_id_seq'::text))"))
+  createdAt DateTime @default(now()) @map("created_at")
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   @map("author_id")
+  contest   Contest  @relation(fields: [contestId], references: [id])
+  contestId String   @map("contest_id")
+  // TODO: decide if we want captions to be optional.
+  caption   String?
+
+  @@map("submissions")
+}
+
+model User {
+  id                String                @id @default(dbgenerated("id_encode(nextval('users_id_seq'::text))"))
+  // TODO: maybe add discord user id?
+  discordTag        String                @unique @map("discord_tag")
+  twitchName        String                @unique @map("twitch_name")
+  // TODO: decide if we need this.
+  twitchDisplayName String                @unique @map("twitch_display_name")
+  contests          ContestParticipants[]
+  submissions       Submission[]
+  profileUrl        String                @map("profile_url")
+
+  @@map("users")
+}
+
+model ContestParticipants {
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @map("user_id")
+  contest   Contest @relation(fields: [contestId], references: [id])
+  contestId String  @map("contest_id")
+
+  @@id([userId, contestId])
+  @@map("contest_participants")
+}

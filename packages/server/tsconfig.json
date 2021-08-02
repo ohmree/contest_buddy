@@ -1,40 +1,40 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "rootDir": ".",
-        "outDir": "dist",
-        "baseUrl": ".",
-        "paths": {
-            "$root/*": [
-                "../*"
-            ],
-            "~/*": [
-                "./*"
-            ]
-        },
-        "importHelpers": true,
-        "composite": true,
-        "declaration": true,
-        "declarationMap": true,
-        "allowSyntheticDefaultImports": true
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "$root/*": [
+        "../*"
+      ],
+      "~/*": [
+        "./*"
+      ]
     },
-    "references": [
-        {
-            "path": "../client"
-        }
-    ],
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ],
-    "ts-node": {
-        "compilerOptions": {
-            "module": "CommonJS"
-        },
-        "transpileOnly": true,
-        "transpiler": "ts-node/transpilers/swc-experimental"
+    "importHelpers": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "references": [
+    {
+      "path": "../client"
     }
+  ],
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "transpileOnly": true,
+    "transpiler": "ts-node/transpilers/swc-experimental"
+  }
 }

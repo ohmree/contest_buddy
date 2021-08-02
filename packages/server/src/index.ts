@@ -9,6 +9,7 @@ import {createServer as createViteServer} from 'vite';
 import sirv from 'sirv';
 
 const prisma = new PrismaClient();
+
 const app = new App();
 const api = new App();
 const isProd = process.env['NODE_ENV'] === 'production';
@@ -44,10 +45,11 @@ const isProd = process.env['NODE_ENV'] === 'production';
         );
         const appHtml = await viteServer.transformIndexHtml(url, template);
         response.status(200).set({'Content-Type': 'text/html'}).end(appHtml);
-      } catch (error: unknown) {
-        viteServer.ssrFixStacktrace(error as Error);
+      } catch (_error: unknown) {
+        const error = _error as Error;
+        viteServer.ssrFixStacktrace(error);
         console.error(error);
-        response.status(500).end((error as Error).message);
+        response.status(500).end(error.message);
       }
     });
   }

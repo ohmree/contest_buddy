@@ -1,11 +1,16 @@
 {
   "name": "contest_buddy",
+  "author": "TODO",
+  "license": "UNLICENSED",
   "version": "0.0.1",
   "description": "TODO",
   "private": true,
   "xo": {
     "space": true,
     "prettier": true,
+    "plugins": [
+      "eslint-plugin-solid"
+    ],
     "rules": {
       "unicorn/prefer-module": "off"
     },
@@ -14,10 +19,13 @@
         "files": "packages/client/src/**/*.ts",
         "rules": {
           "unicorn/prefer-module": "error"
-        },
-        "plugins": [
-          "eslint-plugin-solid"
-        ]
+        }
+      },
+      {
+        "files": "packages/bot/src/discords/*-discord.ts",
+        "rules": {
+          "new-cap": "off"
+        }
       }
     ],
     "settings": {
@@ -44,6 +52,7 @@
   "devDependencies": {
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
+    "eslint-plugin-json": "^3.0.0",
     "rimraf": "^3.0.2",
     "xo": "^0.42.0"
   },

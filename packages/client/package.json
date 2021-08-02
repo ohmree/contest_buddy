@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "description": "TODO",
   "main": "src/index.tsx",
-  "author": "Me :)",
-  "license": "MIT",
+  "private": true,
   "devDependencies": {
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-solid": "github:joshwilsonvu/eslint-plugin-solid",

@@ -1,65 +1,65 @@
 {
-        "compilerOptions": {
-                "incremental": true,
-                "target": "ESNext",
-                "module": "CommonJS",
-                "lib": [
-                        "ESNext",
-                        "dom"
-                ],
-                "allowJs": false,
-                "sourceMap": true,
-                "outDir": "dist",
-                "rootDir": ".",
-                "importHelpers": true,
-                "strict": true,
-                "noImplicitAny": true,
-                "strictNullChecks": true,
-                "strictFunctionTypes": true,
-                "strictBindCallApply": true,
-                "strictPropertyInitialization": true,
-                "noImplicitThis": true,
-                "alwaysStrict": true,
-                "noUnusedLocals": true,
-                "noUnusedParameters": true,
-                "noImplicitReturns": true,
-                "noFallthroughCasesInSwitch": true,
-                "noUncheckedIndexedAccess": true,
-                "noImplicitOverride": true,
-                "noPropertyAccessFromIndexSignature": true,
-                "moduleResolution": "node",
-                "baseUrl": ".",
-                "allowSyntheticDefaultImports": true,
-                "esModuleInterop": true,
-                "experimentalDecorators": true,
-                "emitDecoratorMetadata": true,
-                "skipLibCheck": true,
-                "forceConsistentCasingInFileNames": true,
-                "paths": {
-                        "$root/*": [
-                                "packages/*/src/index.ts"
-                        ]
-                }
-        },
-        "references": [
-                {
-                        "path": "packages/server"
-                },
-                {
-                        "path": "packages/bot"
-                }
-        ],
-        "files": [],
-        "exclude": [
-                "node_modules",
-                "dist",
-                "*.d.ts"
-        ],
-        "ts-node": {
-                "compilerOptions": {
-                        "module": "CommonJS"
-                },
-                "transpileOnly": true,
-                "transpiler": "ts-node/transpilers/swc-experimental"
-        }
+  "compilerOptions": {
+    "incremental": true,
+    "target": "ESNext",
+    "module": "CommonJS",
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "allowJs": false,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "importHelpers": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "$root/*": [
+        "packages/*/src/index.ts"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "packages/server"
+    },
+    {
+      "path": "packages/bot"
+    }
+  ],
+  "files": [],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "*.d.ts"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "transpileOnly": true,
+    "transpiler": "ts-node/transpilers/swc-experimental"
+  }
 }

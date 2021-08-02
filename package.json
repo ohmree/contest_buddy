@@ -1,23 +1,54 @@
 {
-  "name": "ContestBot",
+  "name": "contest_buddy",
   "version": "0.0.1",
   "description": "TODO",
-  "main": "src/index.ts",
   "private": true,
-  "dependencies": {
-    "@prisma/client": "2.27.0",
-    "@swc/helpers": "^0.2.12",
-    "@typeit/discord": "^4.0.10",
-    "discord.js": "^12.5.3",
-    "dotenv": "^10.0.0",
-    "fastify": "^3.19.2"
+  "xo": {
+    "space": true,
+    "prettier": true,
+    "rules": {
+      "unicorn/prefer-module": "off"
+    },
+    "overrides": [
+      {
+        "files": "packages/client/src/**/*.ts",
+        "rules": {
+          "unicorn/prefer-module": "error"
+        },
+        "plugins": [
+          "eslint-plugin-solid"
+        ]
+      }
+    ],
+    "settings": {
+      "import/resolver": {
+        "typescript": {
+          "alwaysTryTypes": true
+        }
+      }
+    }
+  },
+  "scripts": {
+    "dev:client": "pnpm m run dev --filter client",
+    "dev:bot": "pnpm m run dev --filter bot",
+    "dev:server": "pnpm m run dev --filter server",
+    "dev": "pnpm dev:server",
+    "build:client": "pnpm run build --filter client",
+    "build:backend": "tsc -b",
+    "build": "concurrently pnpm:build:backend pnpm:build:client",
+    "start": "pnpm m run start --filter server",
+    "lint": "xo",
+    "fix": "xo --fix",
+    "clean": "pnpm m run clean --filter server client"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.66",
-    "@types/node": "^16.4.3",
-    "prisma": "2.27.0",
-    "prisma-case-format": "^1.0.3",
-    "ts-node": "^10.1.0",
-    "typescript": "^4.3.5"
+    "concurrently": "^6.2.0",
+    "cross-env": "^7.0.3",
+    "rimraf": "^3.0.2",
+    "xo": "^0.42.0"
+  },
+  "dependencies": {
+    "pm2": "^5.1.0",
+    "ts-node": "^10.1.0"
   }
 }

@@ -118,16 +118,3 @@ dist
 
 # Created by https://www.toptal.com/developers/gitignore/api/yarn
 # Edit at https://www.toptal.com/developers/gitignore?templates=yarn
-
-### yarn ###
-# https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
-
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
-
-# End of https://www.toptal.com/developers/gitignore/api/yarn
-

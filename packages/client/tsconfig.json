@@ -1,0 +1,32 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "jsxImportSource": "solid-js",
+        "baseUrl": ".",
+        "paths": {
+            "$root/*": [
+                "../*"
+            ],
+            "~/*": [
+                "./*"
+            ]
+        },
+        "lib": [
+            "dom"
+        ],
+        "rootDir": ".",
+        "outDir": "../server/dist/client",
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

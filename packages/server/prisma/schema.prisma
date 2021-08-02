@@ -1,6 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Add this to your first migration:
 // CREATE EXTENSION IF NOT EXISTS pg_hashids;
 // CREATE SEQUENCE contests_id_seq AS integer;
 // CREATE SEQUENCE submissions_id_seq AS integer;

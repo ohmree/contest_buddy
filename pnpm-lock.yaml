@@ -6,9 +6,7 @@ importers:
     specifiers:
       concurrently: ^6.2.0
       cross-env: ^7.0.3
-      esbuild-node-loader: ^0.1.1
-      eslint-plugin-json: ^3.0.0
-      esmo: ^0.8.0
+      eslint-plugin-solid: ^0.1.1
       pm2: ^5.1.0
       rimraf: ^3.0.2
       xo: ^0.42.0
@@ -17,9 +15,7 @@ importers:
     devDependencies:
       concurrently: 6.2.0
       cross-env: 7.0.3
-      esbuild-node-loader: 0.1.1
-      eslint-plugin-json: 3.0.0
-      esmo: 0.8.0
+      eslint-plugin-solid: 0.1.1
       rimraf: 3.0.2
       xo: 0.42.0
 
@@ -52,7 +48,7 @@ importers:
     specifiers:
       dirname-filename-esm: ^1.1.1
       eslint-import-resolver-typescript: ^2.4.0
-      eslint-plugin-solid: github:joshwilsonvu/eslint-plugin-solid
+      eslint-plugin-solid: ^0.1.1
       prettier: ^2.3.2
       solid-app-router: ^0.1.3
       solid-js: ^1.0.7
@@ -73,7 +69,7 @@ importers:
     devDependencies:
       dirname-filename-esm: 1.1.1
       eslint-import-resolver-typescript: 2.4.0
-      eslint-plugin-solid: github.com/joshwilsonvu/eslint-plugin-solid/76b99ffbe118de556aea4aac42012f6b8a7b4459
+      eslint-plugin-solid: 0.1.1
       prettier: 2.3.2
       typescript: 4.3.5
       vite: 2.4.4
@@ -2237,19 +2233,6 @@ packages:
     engines: {node: '>=12.x'}
     dev: false
 
-  /esbuild-node-loader/0.1.1:
-    resolution: {integrity: sha512-n24xYzMfKmPupUZgs0QYBr52HUSh1M1vDtBfkEVa6pdENqo5+U5WP+zaj4Iw2MinuYk1axLW8+NVutrBCkrdmA==}
-    dependencies:
-      esbuild: 0.12.17
-    dev: true
-
-  /esbuild-register/2.6.0:
-    resolution: {integrity: sha512-2u4AtnCXP5nivtIxZryiZOUcEQkOzFS7UhAqibUEmaTAThJ48gDLYTBF/Fsz+5r0hbV1jrFE6PQvPDUrKZNt/Q==}
-    dependencies:
-      esbuild: 0.12.17
-      jsonc-parser: 3.0.0
-    dev: true
-
   /esbuild/0.12.17:
     resolution: {integrity: sha512-GshKJyVYUnlSXIZj/NheC2O0Kblh42CS7P1wJyTbbIHevTG4jYMS9NNw8EOd8dDWD0dzydYHS01MpZoUcQXB4g==}
     hasBin: true
@@ -2453,14 +2436,6 @@ packages:
       tsconfig-paths: 3.10.1
     dev: true
 
-  /eslint-plugin-json/3.0.0:
-    resolution: {integrity: sha512-7qoY5pbzBLEttJWy4/cDtULK3EKglgIwfXk5Yqp3StJaQ4Bu4Jmp0n2fJN5vBe/hLGaECupq3edn1j/k7O0bFA==}
-    engines: {node: '>=12.0'}
-    dependencies:
-      lodash: 4.17.21
-      vscode-json-languageservice: 4.1.6
-    dev: true
-
   /eslint-plugin-no-use-extend-native/0.5.0:
     resolution: {integrity: sha512-dBNjs8hor8rJgeXLH4HTut5eD3RGWf9JUsadIfuL7UosVQ/dnvOKwxEcRrXrFxrMZ8llUVWT+hOimxJABsAUzQ==}
     engines: {node: '>=6.0.0'}
@@ -2510,6 +2485,20 @@ packages:
       eslint: ^7.0.0
     dependencies:
       eslint: 7.32.0
+    dev: true
+
+  /eslint-plugin-solid/0.1.1:
+    resolution: {integrity: sha512-YddUqD22+qPDTi5W8yQmptH+p3Wm8eZat3OjyZqb4+U//WEJ8Os0fiWliTAiSsbF7t1GE8zLsm0yeA91N0acGw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      eslint: 6.x-7.x
+    dependencies:
+      eslint-utils: 3.0.0
+      is-html: 2.0.0
+      jsx-ast-utils: 3.2.0
+      kebab-case: 1.0.1
+      known-css-properties: 0.23.0
+      style-to-object: 0.3.0
     dev: true
 
   /eslint-plugin-unicorn/34.0.1_eslint@7.32.0:
@@ -2649,16 +2638,6 @@ packages:
 
   /esm-utils/1.1.0:
     resolution: {integrity: sha512-vm3Q1u5RvJFKbizsyK4POBdFjXJFwA+1zEbSAuC+ekjOVWGt/FCXfY8b548fccFLGPihOu1CuS//EOUsj6jczA==}
-    dev: true
-
-  /esmo/0.8.0:
-    resolution: {integrity: sha512-RcuRk9wANqW41sZHJdVCQFrSnbuFa7uRxcOr/f5f6e5eIrhW0Yp7kkBgJO7E6Ico0gjZmA0Yz/Dpp38PhRqZsw==}
-    hasBin: true
-    dependencies:
-      cross-spawn: 7.0.3
-      esbuild: 0.12.17
-      esbuild-node-loader: 0.1.1
-      esbuild-register: 2.6.0
     dev: true
 
   /espree/7.3.1:
@@ -3545,10 +3524,6 @@ packages:
     hasBin: true
     dependencies:
       minimist: 1.2.5
-    dev: true
-
-  /jsonc-parser/3.0.0:
-    resolution: {integrity: sha512-fQzRfAbIBnR0IQvftw9FJveWiHp72Fg20giDrHz6TdfB12UH/uue0D3hm57UB5KgAVuniLMCaS8P1IMj9NR7cA==}
     dev: true
 
   /jsonfile/4.0.0:
@@ -5623,33 +5598,6 @@ packages:
       js-git: 0.7.8
     dev: false
 
-  /vscode-json-languageservice/4.1.6:
-    resolution: {integrity: sha512-DIKb3tcfRtb3tIE6g9SLOl5E9tNSt6kljH08Wa5RwFlVshtXGrDDzttchze4CYy9pJpE9mBtCbRHmLvY1Z1ZXA==}
-    engines: {npm: '>=7.0.0'}
-    dependencies:
-      jsonc-parser: 3.0.0
-      vscode-languageserver-textdocument: 1.0.1
-      vscode-languageserver-types: 3.16.0
-      vscode-nls: 5.0.0
-      vscode-uri: 3.0.2
-    dev: true
-
-  /vscode-languageserver-textdocument/1.0.1:
-    resolution: {integrity: sha512-UIcJDjX7IFkck7cSkNNyzIz5FyvpQfY7sdzVy+wkKN/BLaD4DQ0ppXQrKePomCxTS7RrolK1I0pey0bG9eh8dA==}
-    dev: true
-
-  /vscode-languageserver-types/3.16.0:
-    resolution: {integrity: sha512-k8luDIWJWyenLc5ToFQQMaSrqCHiLwyKPHKPQZ5zz21vM+vIVUSvsRpcbiECH4WR88K2XZqc4ScRcZ7nk/jbeA==}
-    dev: true
-
-  /vscode-nls/5.0.0:
-    resolution: {integrity: sha512-u0Lw+IYlgbEJFF6/qAqG2d1jQmJl0eyAGJHoAJqr2HT4M2BNuQYSEiSE75f52pXHSJm8AlTjnLLbBFPrdz2hpA==}
-    dev: true
-
-  /vscode-uri/3.0.2:
-    resolution: {integrity: sha512-jkjy6pjU1fxUvI51P+gCsxg1u2n8LSt0W6KrCNQceaziKzff74GoWmjVG46KieVzybO1sttPQmYfrwSHey7GUA==}
-    dev: true
-
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}
     dependencies:
@@ -5841,22 +5789,4 @@ packages:
       archiver-utils: 2.1.0
       compress-commons: 3.0.0
       readable-stream: 3.6.0
-    dev: true
-
-  github.com/joshwilsonvu/eslint-plugin-solid/76b99ffbe118de556aea4aac42012f6b8a7b4459:
-    resolution: {tarball: https://codeload.github.com/joshwilsonvu/eslint-plugin-solid/tar.gz/76b99ffbe118de556aea4aac42012f6b8a7b4459}
-    name: eslint-plugin-solid
-    version: 0.0.1
-    engines: {node: '>=12.0.0'}
-    prepare: true
-    requiresBuild: true
-    peerDependencies:
-      eslint: 6.x-7.x
-    dependencies:
-      eslint-utils: 3.0.0
-      is-html: 2.0.0
-      jsx-ast-utils: 3.2.0
-      kebab-case: 1.0.1
-      known-css-properties: 0.23.0
-      style-to-object: 0.3.0
     dev: true

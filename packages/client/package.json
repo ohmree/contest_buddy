@@ -8,7 +8,7 @@
   "devDependencies": {
     "dirname-filename-esm": "^1.1.1",
     "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-solid": "github:joshwilsonvu/eslint-plugin-solid",
+    "eslint-plugin-solid": "^0.1.1",
     "prettier": "^2.3.2",
     "typescript": "^4.3.5",
     "vite": "^2.4.4",

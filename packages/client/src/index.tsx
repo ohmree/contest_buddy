@@ -12,7 +12,9 @@ const User = lazy(async () => import('./pages/users/[id]'));
 
 const App: Component = () => (
   <>
-    <h1 text="xl font-medium gray-800 md:3xl dark:white"></h1>
+    <h1 text="xl font-medium gray-800 md:3xl dark:white">
+      Welcome to ContestBuddy!
+    </h1>
     <Link class="nav" href="/">
       <Button>Home</Button>
     </Link>

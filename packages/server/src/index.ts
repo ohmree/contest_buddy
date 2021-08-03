@@ -1,58 +1,46 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import {App} from '@tinyhttp/app';
 import {logger} from '@tinyhttp/logger';
+import {cors} from '@tinyhttp/cors';
 import {json} from 'milliparsec';
-import {PrismaClient} from '@prisma/client';
-import clientViteConfig from 'client/vite.config';
-import {createServer as createViteServer} from 'vite';
+import prisma_pkg from '@prisma/client';
+import {dirname as getDirname} from 'dirname-filename-esm';
 import sirv from 'sirv';
 
+const {PrismaClient} = prisma_pkg;
+const dirname = getDirname(import.meta);
 const prisma = new PrismaClient();
 
-const app = new App();
-const api = new App();
+const app = new App({settings: {networkExtensions: true}});
+const api = new App({settings: {networkExtensions: true}});
 const isProd = process.env['NODE_ENV'] === 'production';
 
-(async () => {
+async function main() {
   api
+    .use(cors())
     .use(json())
-    .get('/users', async (_request, response) =>
-      response.status(200).json(await prisma.user.findMany())
-    );
+    .get('/users', async (_request, response) => {
+      const users = await prisma.user.findMany();
+      response.status(200).json(users).end();
+    })
+    .get('/users/:id', async (request, response) => {
+      const user = await prisma.user.findUnique({
+        where: {id: request.params['id']}
+      });
+      if (user) {
+        response.status(200).json(user).end();
+      } else {
+        response.status(404).json({message: 'User not found'}).end();
+      }
+    });
 
   app.use(logger()).use('/api', api);
 
   if (isProd) {
-    app.use(sirv(path.resolve(__dirname, '../client')));
-  } else {
-    const viteServer = await createViteServer({
-      server: {
-        middlewareMode: 'ssr',
-        cors: true,
-        hmr: true
-      },
-      ...clientViteConfig
-    });
-    console.log(viteServer.config.server);
-    app.use(viteServer.middlewares);
-    app.use('*', async (request, response) => {
-      const url = request.originalUrl;
-      try {
-        const template = fs.readFileSync(
-          path.resolve(__dirname, '../../client/index.html'),
-          'utf-8'
-        );
-        const appHtml = await viteServer.transformIndexHtml(url, template);
-        response.status(200).set({'Content-Type': 'text/html'}).end(appHtml);
-      } catch (_error: unknown) {
-        const error = _error as Error;
-        viteServer.ssrFixStacktrace(error);
-        console.error(error);
-        response.status(500).end(error.message);
-      }
-    });
+    app.use(sirv(path.resolve(dirname, '../../client/dist')));
   }
 
-  app.listen(3000);
-})();
+  app.use(cors()).listen(4000);
+}
+
+main().finally(async () => prisma.$disconnect());

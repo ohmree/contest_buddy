@@ -2,7 +2,7 @@
   "compilerOptions": {
     "incremental": true,
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
     "lib": [
       "ESNext",
       "dom"
@@ -56,10 +56,7 @@
     "*.d.ts"
   ],
   "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    },
-    "transpileOnly": true,
-    "transpiler": "ts-node/transpilers/swc-experimental"
+    "transpileOnly": true
+    // "transpiler": "ts-node/transpilers/swc-experimental"
   }
 }

@@ -1,12 +1,12 @@
 import path from 'node:path';
 import {Client} from '@typeit/discord';
-import * as dotenv from '@tinyhttp/dotenv';
+// Import * as dotenv from '@tinyhttp/dotenv';
 
-const result = dotenv.config({path: path.resolve(__dirname, '/.env.local')});
+// const result = dotenv.config({path: './.env.local'});
 
-if (result.error) {
-  throw result.error;
-}
+// if (result.error) {
+//   throw result.error;
+// }
 
 async function start() {
   const client = new Client({

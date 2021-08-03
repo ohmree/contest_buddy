@@ -1,32 +1,37 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "jsx": "preserve",
-        "jsxImportSource": "solid-js",
-        "baseUrl": ".",
-        "paths": {
-            "$root/*": [
-                "../*"
-            ],
-            "~/*": [
-                "./*"
-            ]
-        },
-        "lib": [
-            "dom"
-        ],
-        "rootDir": ".",
-        "outDir": "../server/dist/client",
-        "composite": true,
-        "declaration": true,
-        "declarationMap": true,
-        "allowSyntheticDefaultImports": true
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "baseUrl": ".",
+    "paths": {
+      "$root/*": [
+        "../*"
+      ],
+      "~/*": [
+        "./*"
+      ]
     },
-    "include": [
-        "src/**/*"
+    "lib": [
+      "dom"
     ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+    "rootDir": ".",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "references": [
+    {
+      "path": "../server"
+    }
+  ],
+  "include": [
+    "src/**/*",
+    "shims.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

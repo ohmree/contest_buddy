@@ -6,7 +6,7 @@
       "watch": ".",
       "source_map_support": true,
       "env": {
-        "PORT": 3000,
+        "PORT": 4000,
         "NODE_ENV": "development"
       },
       "env_production": {

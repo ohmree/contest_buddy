@@ -5,25 +5,22 @@ import windiCSS from 'vite-plugin-windicss';
 import {defineConfig} from 'vite';
 
 export default defineConfig({
-  root: __dirname,
   build: {
     target: 'esnext',
     polyfillDynamicImport: false,
-    sourcemap: true,
-    outDir: '../server/dist/client',
-    emptyOutDir: true
+    sourcemap: true
   },
   plugins: [
     // ViteTips(),
     tsconfigPaths(),
-    solid({
-      hot: true
-    }),
-    windiCSS({
-      scan: {
-        // We only have to specify the file extensions we actually use.
-        fileExtensions: ['tsx', 'html']
+    solid(),
+    windiCSS([
+      {
+        scan: {
+          // We only have to specify the file extensions we actually use.
+          fileExtensions: ['tsx', 'html']
+        }
       }
-    })
+    ])
   ]
 });

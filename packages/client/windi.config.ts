@@ -8,6 +8,7 @@ export default defineConfig({
   theme: {
     extend: {}
   },
+  attributify: true,
   plugins: [forms, typography],
   extract: {
     include: ['src/**/*.tsx', 'index.html']

@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  postgres:
+    image: "postgres:13.3-alpine"
+    ports:
+      - "5432:5432"
+    networks:
+    - "contest_buddy_network"
+    volumes:
+    - "db-data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "contest_buddy"
+
+  pgadmin:
+    image: "dpage/pgadmin4"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_DISABLE_POSTFIX: "True"
+    ports:
+    - "8889:80"
+    volumes:
+    - "pgadmin-data:/var/lib/pgadmin"
+    - "pgadmin_servers.json:/pgadmin4/servers.json"
+    networks:
+    - "contest_buddy_network"
+
+networks:
+  contest_buddy_network:
+    driver: "bridge"
+
+volumes:
+  db-data:
+  pgadmin-data:
+  pgadmin_servers.json:

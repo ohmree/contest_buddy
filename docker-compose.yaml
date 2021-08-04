@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       PGDATA: /data/postgres
     volumes:
-       - "./db-data:/data/postgres"
+      - "./db-data:/data/postgres"
     ports:
       - "5432:5432"
     networks:
@@ -26,14 +26,14 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
-      PGADMIN_DISABLE_POSTFIX: 'True'
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      PGADMIN_DISABLE_POSTFIX: "True"
 
     volumes:
-       - "./pgadmin-data:/root/.pgadmin"
-       - "./pgadmin_servers.json:/pgadmin4/servers.json"
-       - "./pgpass.conf:/pgpass.conf"
+      - "./pgadmin-data:/root/.pgadmin"
+      - "./pgadmin_servers.json:/pgadmin4/servers.json"
+      - "./pgpass.conf:/pgpass.conf"
 
     ports:
       - "${PGADMIN_PORT:-8889}:80"
@@ -46,7 +46,7 @@ networks:
     driver: bridge
 
 volumes:
-    db-data: {}
-    pgadmin-data: {}
-    pgadmin_servers.json: {}
-    pgpass.conf: {}
+  db-data: {}
+  pgadmin-data: {}
+  pgadmin_servers.json: {}
+  pgpass.conf: {}

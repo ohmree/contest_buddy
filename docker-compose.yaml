@@ -3,7 +3,11 @@ version: '3.8'
 services:
   postgres:
     container_name: postgres_container
-    image: "postgres:13.3-alpine"
+    image: "pg_hashids"
+    build:
+      context: pg_hashids
+      dockerfile: Dockerfile
+
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -45,4 +49,4 @@ volumes:
     db-data: {}
     pgadmin-data: {}
     pgadmin_servers.json: {}
-    pgpass.txt: {}
+    pgpass.conf: {}

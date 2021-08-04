@@ -46,7 +46,7 @@
     "build:backend": "tsc -b",
     "build": "concurrently pnpm:build:backend pnpm:build:client",
     "start": "pnpm m run start --filter server",
-    "lint": "xo",
+    "lint": "xo packages/",
     "fix": "xo --fix",
     "clean": "pnpm m run clean --filter server client"
   },

@@ -17,6 +17,11 @@
     "declarationMap": true,
     "allowSyntheticDefaultImports": true
   },
+  "references": [
+    {
+      "path": "../server"
+    }
+  ],
   "include": [
     "src/**/*"
   ],

@@ -1,0 +1,55 @@
+#+PROPERTY: header-args:restclient :var api="http://localhost:4000/api"
+* API
+Everything returns up to 50 results, always.
+** Users
+*** Get by ID(s)
+#+BEGIN_SRC restclient
+GET :api/users?id=0v&id=1R
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+[
+  {
+    "id": "0v",
+    "discordTag": "Amari.Orn53#9628",
+    "twitchName": "amari.orn53",
+    "twitchDisplayName": "Amari.Orn53",
+    "profileUrl": "https://cdn.fakercloud.com/avatars/shinze_128.jpg"
+  },
+  {
+    "id": "1R",
+    "discordTag": "Amani_Oberbrunner#1842",
+    "twitchName": "amani_oberbrunner",
+    "twitchDisplayName": "Amani_Oberbrunner",
+    "profileUrl": "https://cdn.fakercloud.com/avatars/hasslunsford_128.jpg"
+  }
+]
+// GET http://localhost:4000/api/users?id=0v&id=1R
+// HTTP/1.1 200 OK
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-DNS-Prefetch-Control: off
+// Expect-CT: max-age=0
+// X-Frame-Options: SAMEORIGIN
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// X-Download-Options: noopen
+// X-Content-Type-Options: nosniff
+// X-Permitted-Cross-Domain-Policies: none
+// Referrer-Policy: no-referrer
+// X-XSS-Protection: 0
+// Access-Control-Allow-Origin: *
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// Access-Control-Allow-Headers: content-type
+// Content-Type: application/json
+// Date: Thu, 05 Aug 2021 15:22:24 GMT
+// Connection: keep-alive
+// Keep-Alive: timeout=5
+// Content-Length: 438
+// Request duration: 0.007929s
+#+END_SRC
+
+*** Get by contest ID
+#+BEGIN_SRC restclient
+# FIXME:
+GET :api/users?contest_id=foobar
+#+END_SRC

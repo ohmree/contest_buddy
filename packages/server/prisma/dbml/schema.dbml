@@ -1,0 +1,53 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Contest {
+  id String [pk]
+  name String [not null]
+  description String
+  isOpen Boolean [not null, default: true]
+  picturesOnly Boolean [not null, default: false]
+  maxSubmissions Int [not null, default: 1]
+  participants ContestParticipants [not null]
+  submissions Submission [not null]
+}
+
+Table Submission {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  author User [not null]
+  authorId String [not null]
+  contest Contest [not null]
+  contestId String [not null]
+  caption String
+}
+
+Table User {
+  id String [pk]
+  discordTag String [unique, not null]
+  twitchName String [unique, not null]
+  twitchDisplayName String [unique, not null]
+  contests ContestParticipants [not null]
+  submissions Submission [not null]
+  profileUrl String [not null]
+}
+
+Table ContestParticipants {
+  user User [not null]
+  userId String [not null]
+  contest Contest [not null]
+  contestId String [not null]
+
+  indexes {
+    (userId, contestId) [pk]
+  }
+}
+
+Ref: Submission.authorId > User.id
+
+Ref: Submission.contestId > Contest.id
+
+Ref: ContestParticipants.userId > User.id
+
+Ref: ContestParticipants.contestId > Contest.id

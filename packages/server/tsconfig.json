@@ -1,6 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "ESNext.AsyncIterable"
+    ],
     "rootDir": ".",
     "outDir": "dist",
     "baseUrl": ".",

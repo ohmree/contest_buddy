@@ -16,7 +16,16 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["nApi", "orderByRelation", "selectRelationCount", "referentialActions", "orderByAggregateGroup"]
+}
+
+// generator typegraphql {
+//   provider = "typegraphql-prisma"
+// }
+
+generator dbml {
+  provider = "prisma-dbml-generator"
 }
 
 model Contest {

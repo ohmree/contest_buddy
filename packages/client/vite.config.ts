@@ -1,8 +1,10 @@
 import tsconfigPaths from 'vite-tsconfig-paths';
 import solid from 'vite-plugin-solid';
-import windiCSS from 'vite-plugin-windicss';
 // Import viteTips from 'vite-plugin-tips';
 import {defineConfig} from 'vite';
+import windi_pkg = require('vite-plugin-windicss');
+
+const {default: windiCSS} = windi_pkg;
 
 export default defineConfig({
   build: {
@@ -14,13 +16,11 @@ export default defineConfig({
     // ViteTips(),
     tsconfigPaths(),
     solid(),
-    windiCSS([
-      {
-        scan: {
-          // We only have to specify the file extensions we actually use.
-          fileExtensions: ['tsx', 'html']
-        }
+    windiCSS({
+      scan: {
+        // We only have to specify the file extensions we actually use.
+        fileExtensions: ['tsx', 'html']
       }
-    ])
+    })
   ]
 });

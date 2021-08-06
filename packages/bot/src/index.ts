@@ -3,6 +3,7 @@ import * as dotenv from '@tinyhttp/dotenv';
 import {dirname as getDirname} from 'dirname-filename-esm';
 import path from 'node:path';
 import prisma_pkg from '@prisma/client';
+import {AppDiscord} from './discords/app-discord';
 
 const {PrismaClient} = prisma_pkg;
 
@@ -18,10 +19,7 @@ const prisma = new PrismaClient();
 async function main() {
   const discordToken = process.env['DISCORD_TOKEN'];
   const client = new Client({
-    classes: [
-      path.resolve(dirname, '/discords/*-discord.ts'), // Glob string to load the classes
-      path.resolve(dirname, '/discords/*-discord.js')  // If you compile using "tsc" the file extension changes to .js
-    ],
+    classes: [AppDiscord],
     silent: false,
     variablesChar: ':'
   });

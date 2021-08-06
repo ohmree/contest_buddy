@@ -2,22 +2,26 @@ import {
   Discord,
   Command,
   CommandMessage,
-  CommandNotFound
+  CommandNotFound,
+  On,
 } from '@typeit/discord';
+import type {ArgsOf} from '@typeit/discord';
 
 // Specify your prefix
-@Discord('!')
-abstract class AppDiscord {
-  // Reachable with the command: !ping
+@Discord('=')
+export abstract class AppDiscord {
+  @On('guildCreate')
+  async onGuildCreate([guild]: ArgsOf<'guildCreate'>) {
+    console.debug(`Guild ${guild.name} created`);
+  }
+    // Reachable with the command: !ping
   @Command('ping')
-  private async ping(message: CommandMessage) {
-    await message.reply('pong');
+  async ping(message: CommandMessage) {
+    await message.reply('pong')
   }
 
   @CommandNotFound()
-  private async notFound(message: CommandMessage) {
+  async notFound(message: CommandMessage) {
     await message.reply('wat');
   }
 }
-
-void AppDiscord;

@@ -3,6 +3,7 @@
 Everything returns up to 50 results, always.
 ** Users
 *** Get by ID(s)
+**** With valid input
 #+BEGIN_SRC restclient
 GET :api/users?id=0v&id=1R
 #+END_SRC
@@ -10,20 +11,20 @@ GET :api/users?id=0v&id=1R
 #+RESULTS:
 #+BEGIN_SRC js
 [
-  {
-    "id": "0v",
-    "discordTag": "Amari.Orn53#9628",
-    "twitchName": "amari.orn53",
-    "twitchDisplayName": "Amari.Orn53",
-    "profileUrl": "https://cdn.fakercloud.com/avatars/shinze_128.jpg"
-  },
-  {
-    "id": "1R",
-    "discordTag": "Amani_Oberbrunner#1842",
-    "twitchName": "amani_oberbrunner",
-    "twitchDisplayName": "Amani_Oberbrunner",
-    "profileUrl": "https://cdn.fakercloud.com/avatars/hasslunsford_128.jpg"
-  }
+    {
+        "id": "0v",
+        "discordTag": "Amari.Orn53#9628",
+        "twitchName": "amari.orn53",
+        "twitchDisplayName": "Amari.Orn53",
+        "profileUrl": "https://cdn.fakercloud.com/avatars/shinze_128.jpg"
+    },
+    {
+        "id": "1R",
+        "discordTag": "Amani_Oberbrunner#1842",
+        "twitchName": "amani_oberbrunner",
+        "twitchDisplayName": "Amani_Oberbrunner",
+        "profileUrl": "https://cdn.fakercloud.com/avatars/hasslunsford_128.jpg"
+    }
 ]
 // GET http://localhost:4000/api/users?id=0v&id=1R
 // HTTP/1.1 200 OK
@@ -47,9 +48,139 @@ GET :api/users?id=0v&id=1R
 // Content-Length: 438
 // Request duration: 0.007929s
 #+END_SRC
+**** With invalid input
+#+BEGIN_SRC restclient
+GET :api/users
+#+END_SRC
 
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "status": 422,
+  "message": "Must specify at least 1 user ID or exactly 1 contest ID"
+}
+// GET http://localhost:4000/api/users
+// HTTP/1.1 422 Unprocessable Entity
+// Content-Type: application/json
+// Content-Length: 91
+// Connection: keep-alive
+// Status: 422 Unprocessable Entity
+// X-DNS-Prefetch-Control: off
+// Access-Control-Allow-Origin: *
+// Date: Fri, 06 Aug 2021 19:54:25 GMT
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// Referrer-Policy: no-referrer
+// X-Permitted-Cross-Domain-Policies: none
+// Expect-CT: max-age=0
+// X-XSS-Protection: 0
+// Access-Control-Allow-Headers: content-type
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// X-Download-Options: noopen
+// X-Frame-Options: SAMEORIGIN
+// X-Content-Type-Options: nosniff
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-Powered-By: Phusion Passenger(R) 6.0.9
+// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
+// Request duration: 3.191832s
+#+END_SRC
 *** Get by contest ID
 #+BEGIN_SRC restclient
 # FIXME:
 GET :api/users?contest_id=foobar
+#+END_SRC
+** Contests
+*** Create new contest
+**** With valid input
+#+BEGIN_SRC restclient
+POST :api/contests
+
+{
+  "name": "My cool contest",
+  "description": "Swag",
+  "isOpen": true,
+  "picturesOnly": false,
+  "maxSubmissions": 3,
+  "participantIds": ["0v", "1R"]
+}
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+    "id": "jR",
+    "name": "My cool contest",
+    "description": "Swag",
+    "isOpen": true,
+    "picturesOnly": false,
+    "maxSubmissions": 3
+}
+// POST http://localhost:4000/api/contests
+// HTTP/1.1 200 OK
+// Content-Type: application/json
+// Content-Length: 136
+// Connection: keep-alive
+// Status: 200 OK
+// X-DNS-Prefetch-Control: off
+// Access-Control-Allow-Origin: *
+// Date: Fri, 06 Aug 2021 19:15:04 GMT
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// Referrer-Policy: no-referrer
+// X-Permitted-Cross-Domain-Policies: none
+// Expect-CT: max-age=0
+// X-XSS-Protection: 0
+// Access-Control-Allow-Headers: content-type
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// X-Download-Options: noopen
+// X-Frame-Options: SAMEORIGIN
+// X-Content-Type-Options: nosniff
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-Powered-By: Phusion Passenger(R) 6.0.9
+// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
+// Request duration: 4.205494s
+#+END_SRC
+**** With invalid input
+#+BEGIN_SRC restclient
+POST :api/contests
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "status": 422,
+  "errors": [
+    {
+      "type": "required",
+      "message": "The 'name' field is required.",
+      "field": "name"
+    },
+    {
+      "type": "required",
+      "message": "The 'maxSubmissions' field is required.",
+      "field": "maxSubmissions"
+    }
+  ]
+}
+// POST http://localhost:4000/api/contests
+// HTTP/1.1 422 Unprocessable Entity
+// Content-Type: application/json
+// Content-Length: 279
+// Connection: keep-alive
+// Status: 422 Unprocessable Entity
+// X-DNS-Prefetch-Control: off
+// Access-Control-Allow-Origin: *
+// Date: Fri, 06 Aug 2021 19:48:36 GMT
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// Referrer-Policy: no-referrer
+// X-Permitted-Cross-Domain-Policies: none
+// Expect-CT: max-age=0
+// X-XSS-Protection: 0
+// Access-Control-Allow-Headers: content-type
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// X-Download-Options: noopen
+// X-Frame-Options: SAMEORIGIN
+// X-Content-Type-Options: nosniff
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-Powered-By: Phusion Passenger(R) 6.0.9
+// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
+// Request duration: 4.287386s
 #+END_SRC

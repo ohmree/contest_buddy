@@ -23,7 +23,7 @@
         }
       },
       {
-        "files": "packages/bot/src/discords/*-discord.ts",
+        "files": "packages/server/src/discords/*-discord.ts",
         "rules": {
           "new-cap": "off"
         }
@@ -39,7 +39,6 @@
   },
   "scripts": {
     "dev:client": "pnpm m run dev --filter client",
-    "dev:bot": "pnpm m run dev --filter bot",
     "dev:server": "pnpm m run dev --filter server",
     "dev": "pnpm m run dev",
     "build:client": "pnpm run build --filter client",

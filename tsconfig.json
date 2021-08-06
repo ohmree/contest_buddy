@@ -44,9 +44,6 @@
   "references": [
     {
       "path": "packages/server"
-    },
-    {
-      "path": "packages/bot"
     }
   ],
   "files": [],

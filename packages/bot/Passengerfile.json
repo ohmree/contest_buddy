@@ -1,8 +1,0 @@
-{
-  "app_type": "node",
-  "envvars": {
-    "NODE_OPTIONS": "--experimental-loader=ts-node/esm --experimental-specifier-resolution=node"
-  },
-  "startup_file": "_passenger.cjs",
-  "port": 2000
-}

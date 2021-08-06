@@ -3,7 +3,6 @@ import type {User} from '$root/server';
 
 async function fetchUsers(): Promise<[User]> {
   const response = await fetch('http://localhost:4000/api/users');
-  console.debug(response);
   return (await response.json()) as Promise<[User]>;
 }
 

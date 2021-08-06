@@ -1,4 +1,6 @@
 #+PROPERTY: header-args:restclient :var api="http://localhost:4000/api"
+* TODO
+ - [ ] Figure out why getting users by contest id and contests by user id returns an empty array.
 * API
 Everything returns up to 50 results, always.
 ** Users
@@ -83,12 +85,163 @@ GET :api/users
 // Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
 // Request duration: 3.191832s
 #+END_SRC
-*** Get by contest ID
+*** Get by contest
 #+BEGIN_SRC restclient
-# FIXME:
-GET :api/users?contest_id=foobar
+GET :api/users?contest_id=jR
 #+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+[]
+// GET http://localhost:4000/api/users?contest_id=jR
+// HTTP/1.1 200 OK
+// Content-Type: application/json
+// Content-Length: 2
+// Connection: keep-alive
+// Status: 200 OK
+// X-DNS-Prefetch-Control: off
+// Access-Control-Allow-Origin: *
+// Date: Fri, 06 Aug 2021 21:30:14 GMT
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// Referrer-Policy: no-referrer
+// X-Permitted-Cross-Domain-Policies: none
+// Expect-CT: max-age=0
+// X-XSS-Protection: 0
+// Access-Control-Allow-Headers: content-type
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// X-Download-Options: noopen
+// X-Frame-Options: SAMEORIGIN
+// X-Content-Type-Options: nosniff
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-Powered-By: Phusion Passenger(R) 6.0.9
+// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
+// Request duration: 4.626129s
+#+END_SRC
+
 ** Contests
+*** Get all
+#+BEGIN_SRC restclient
+GET :api/contests
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+[
+  {
+    "id": "jR",
+    "name": "My cool contest",
+    "description": "Swag",
+    "isOpen": true,
+    "picturesOnly": false,
+    "maxSubmissions": 3
+  }
+]
+// GET http://localhost:4000/api/contests
+// HTTP/1.1 200 OK
+// Content-Type: application/json
+// Content-Length: 156
+// Connection: keep-alive
+// Status: 200 OK
+// X-DNS-Prefetch-Control: off
+// Access-Control-Allow-Origin: *
+// Date: Fri, 06 Aug 2021 21:23:36 GMT
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// Referrer-Policy: no-referrer
+// X-Permitted-Cross-Domain-Policies: none
+// Expect-CT: max-age=0
+// X-XSS-Protection: 0
+// Access-Control-Allow-Headers: content-type
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// X-Download-Options: noopen
+// X-Frame-Options: SAMEORIGIN
+// X-Content-Type-Options: nosniff
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-Powered-By: Phusion Passenger(R) 6.0.9
+// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
+// Request duration: 4.972696s
+#+END_SRC
+*** Get by ID(s)
+This includes user IDs.
+#+BEGIN_SRC restclient
+GET :api/contests?id=jR
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+[
+  {
+    "id": "jR",
+    "name": "My cool contest",
+    "description": "Swag",
+    "isOpen": true,
+    "picturesOnly": false,
+    "maxSubmissions": 3,
+    "participants": [
+      {
+        "userId": "1R"
+      },
+      {
+        "userId": "0v"
+      }
+    ]
+  }
+]
+// GET http://localhost:4000/api/contests?id=jR
+// HTTP/1.1 200 OK
+// Content-Type: application/json
+// Content-Length: 264
+// Connection: keep-alive
+// Status: 200 OK
+// X-DNS-Prefetch-Control: off
+// Access-Control-Allow-Origin: *
+// Date: Fri, 06 Aug 2021 21:25:16 GMT
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// Referrer-Policy: no-referrer
+// X-Permitted-Cross-Domain-Policies: none
+// Expect-CT: max-age=0
+// X-XSS-Protection: 0
+// Access-Control-Allow-Headers: content-type
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// X-Download-Options: noopen
+// X-Frame-Options: SAMEORIGIN
+// X-Content-Type-Options: nosniff
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-Powered-By: Phusion Passenger(R) 6.0.9
+// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
+// Request duration: 4.722427s
+#+END_SRC
+*** Get by participant
+#+BEGIN_SRC restclient
+GET :api/contests?user_id=0v
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+[]
+// GET http://localhost:4000/api/contests?user_id=0v
+// HTTP/1.1 200 OK
+// Content-Type: application/json
+// Content-Length: 2
+// Connection: keep-alive
+// Status: 200 OK
+// X-DNS-Prefetch-Control: off
+// Access-Control-Allow-Origin: *
+// Date: Fri, 06 Aug 2021 21:27:40 GMT
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// Referrer-Policy: no-referrer
+// X-Permitted-Cross-Domain-Policies: none
+// Expect-CT: max-age=0
+// X-XSS-Protection: 0
+// Access-Control-Allow-Headers: content-type
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// X-Download-Options: noopen
+// X-Frame-Options: SAMEORIGIN
+// X-Content-Type-Options: nosniff
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-Powered-By: Phusion Passenger(R) 6.0.9
+// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
+// Request duration: 4.438958s
+#+END_SRC
 *** Create new contest
 **** With valid input
 #+BEGIN_SRC restclient

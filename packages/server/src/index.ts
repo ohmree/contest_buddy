@@ -81,13 +81,48 @@ async function main() {
         const users = await prisma.user.findMany({
           where: {
             contests: {
-              some: {contestId: contestId}
+              some: {contestId}
             }
-          }
+          },
+          take: MAX_API_RETURNS
         });
         response.status(200).json(users);
       } else {
         response.status(422).json({status: 422, message: 'Must specify at least 1 user ID or exactly 1 contest ID'});
+      }
+      response.end();
+    })
+    .get('/contests', async (request, response) => {
+      const contestIds = request.query['id'];
+      const userId = request.query['user_id']?.[0];
+      if (contestIds) {
+        const contests = await prisma.contest.findMany({
+          where: {
+            id: {in: contestIds}
+          },
+          include: {
+            participants: {
+              select: {userId: true}
+            }
+          },
+          take: MAX_API_RETURNS
+        });
+        response.status(200).json(contests);
+      } else if (userId) {
+        const contests = await prisma.contest.findMany({
+          where: {
+            participants: {
+              some: {userId}
+            }
+          },
+          take: MAX_API_RETURNS
+        });
+        response.status(200).json(contests);
+      } else {
+        const contests = await prisma.contest.findMany({
+          take: MAX_API_RETURNS
+        });
+        response.status(200).json(contests);
       }
       response.end();
     })

@@ -82,7 +82,7 @@ async function main() {
           },
           take: MAX_API_RETURNS
         });
-        response.status(200).json(users);
+        response.status(200).send(users);
       } else if (contestId) {
         const users = await prisma.user.findMany({
           where: {
@@ -92,9 +92,9 @@ async function main() {
           },
           take: MAX_API_RETURNS
         });
-        response.status(200).json(users);
+        response.status(200).send(users);
       } else {
-        response.status(422).json({
+        response.status(422).send({
           status: 422,
           message: 'Must specify at least 1 user ID or exactly 1 contest ID'
         });
@@ -117,7 +117,7 @@ async function main() {
           },
           take: MAX_API_RETURNS
         });
-        response.status(200).json(contests);
+        response.status(200).send(contests);
       } else if (userId) {
         const contests = await prisma.contest.findMany({
           where: {
@@ -127,12 +127,12 @@ async function main() {
           },
           take: MAX_API_RETURNS
         });
-        response.status(200).json(contests);
+        response.status(200).send(contests);
       } else {
         const contests = await prisma.contest.findMany({
           take: MAX_API_RETURNS
         });
-        response.status(200).json(contests);
+        response.status(200).send(contests);
       }
 
       response.end();
@@ -166,9 +166,9 @@ async function main() {
             }
           }
         });
-        response.status(200).json(contest);
+        response.status(200).send(contest);
       } else {
-        response.status(422).json({status: 422, errors: validOrError});
+        response.status(422).send({status: 422, errors: validOrError});
       }
 
       response.end();

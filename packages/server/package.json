@@ -23,7 +23,6 @@
     "graphql-scalars": "^1.10.0",
     "helmet": "^4.6.0",
     "milliparsec": "^2.2.0",
-    "pm2": "^5.1.0",
     "postgraphile": "^4.12.3",
     "reflect-metadata": "^0.1.13",
     "sirv": "^1.0.12",
@@ -49,7 +48,7 @@
   },
   "scripts": {
     "dev": "passenger start",
-    "start": "pm2 start ecosystem.config.cjs --env production",
+    "start": "passenger start --environment production",
     "build": "tsc -b",
     "clean": "rimraf dist",
     "cert:gen": "openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' -keyout localhost-privkey.pem -out localhost-cert.pem",

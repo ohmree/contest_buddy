@@ -55,8 +55,5 @@
     "eslint-plugin-solid": "^0.1.1",
     "rimraf": "^3.0.2",
     "xo": "^0.42.0"
-  },
-  "dependencies": {
-    "pm2": "^5.1.0"
   }
 }

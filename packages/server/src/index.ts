@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unassigned-import
 import 'reflect-metadata';
 import path from 'node:path';
 import {App} from '@tinyhttp/app';
@@ -10,13 +11,15 @@ import sirv from 'sirv';
 import helmet from 'helmet';
 import {Client} from '@typeit/discord';
 import * as dotenv from '@tinyhttp/dotenv';
-import {AppDiscord} from './discords/app-discord';
 import Validator from 'fastest-validator';
+import {AppDiscord} from './discords/app-discord';
 
 const {PrismaClient} = prisma_pkg;
 
 const dirname = getDirname(import.meta);
-const dotenvResult = dotenv.config({path: path.resolve(dirname, '../.env.local')});
+const dotenvResult = dotenv.config({
+  path: path.resolve(dirname, '../.env.local')
+});
 
 if (dotenvResult.error) {
   throw dotenvResult.error;
@@ -60,7 +63,10 @@ async function main() {
     .use(helmet())
     .use(cors())
     .use(async (request, response, next) => {
-      if (request.headers['content-type'] === 'application/json' && request.body) {
+      if (
+        request.headers['content-type'] === 'application/json' &&
+        request.body
+      ) {
         await json()(request, response, next);
       } else {
         next();
@@ -88,8 +94,12 @@ async function main() {
         });
         response.status(200).json(users);
       } else {
-        response.status(422).json({status: 422, message: 'Must specify at least 1 user ID or exactly 1 contest ID'});
+        response.status(422).json({
+          status: 422,
+          message: 'Must specify at least 1 user ID or exactly 1 contest ID'
+        });
       }
+
       response.end();
     })
     .get('/contests', async (request, response) => {
@@ -124,27 +134,33 @@ async function main() {
         });
         response.status(200).json(contests);
       }
+
       response.end();
     })
     .post('/contests', async (request, response) => {
-      console.debug('here')
-      const body: Record<string, any> = request.body ?? {};
+      console.debug('here');
+      const body: Record<string, any> =
+        (request.body as Record<string, any>) ?? {};
       const validOrError = checkContest(body);
 
+      const name = body['name'] as string;
+      const description = body['description'] as string;
+      const isOpen = body['isOpen'] as boolean;
+      const picturesOnly = body['picturesOnly'] as boolean;
+      const maxSubmissions = body['maxSubmissions'] as number;
+
       if (validOrError === true) {
-        const participantIds = body['participantIds'];
-        const users = participantIds.map((id: string) => {
-          return {
-            user: { connect: { id }}
-          };
-        })
+        const participantIds: [string] = body['participantIds'] as [string];
+        const users = participantIds.map((id: string) => ({
+          user: {connect: {id}}
+        }));
         const contest = await prisma.contest.create({
           data: {
-            name: body['name'],
-            description: body['description'],
-            isOpen: body['isOpen'],
-            picturesOnly: body['picturesOnly'],
-            maxSubmissions: body['maxSubmissions'],
+            name,
+            description,
+            isOpen,
+            picturesOnly,
+            maxSubmissions,
             participants: {
               create: users
             }
@@ -158,11 +174,7 @@ async function main() {
       response.end();
     });
 
-  app
-    .use(helmet())
-    .use(logger())
-    .use(cors())
-    .use('/api', api);
+  app.use(helmet()).use(logger()).use(cors()).use('/api', api);
 
   if (isProd) {
     app.use(sirv(path.resolve(dirname, '../../client/dist')));

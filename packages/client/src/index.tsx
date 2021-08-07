@@ -3,27 +3,23 @@ import 'windi.css';
 import type {Component} from 'solid-js';
 import {lazy} from 'solid-js';
 import {render} from 'solid-js/web';
-import {Router, Link, Routes, Route} from 'solid-app-router';
-import Button from './components/button';
+import {Router, Routes, Route} from 'solid-app-router';
+import Navbar from './components/navbar';
 
 const Index = lazy(async () => import('./pages/index'));
 const Users = lazy(async () => import('./pages/users'));
 const User = lazy(async () => import('./pages/users/[id]'));
+const Contests = lazy(async () => import('./pages/contests'));
+const Contest = lazy(async () => import('./pages/contests/[id]'));
 
 const App: Component = () => (
   <>
-    <h1 text="xl font-medium gray-800 md:3xl dark:white">
-      Welcome to ContestBuddy!
-    </h1>
-    <Link class="nav" href="/">
-      <Button>Home</Button>
-    </Link>
-    <Link class="nav" href="/users">
-      <Button>Users</Button>
-    </Link>
+    <Navbar />
     <Routes>
       <Route path="/users" element={<Users />} />
       <Route path="/users/:id" element={<User />} />
+      <Route path="/contests" element={<Contests />} />
+      <Route path="/contests/:id" element={<Contest />} />
       <Route path="/" component={Index} />
       {/* <Route path="/*all" element={<NotFound />} /> */}
     </Routes>

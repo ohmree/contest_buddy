@@ -1,5 +1,5 @@
-async function main () {
-  await import('./src/index.ts');
+async function main() {
+  await import('./src/index');
 }
 
-void main();
+main();

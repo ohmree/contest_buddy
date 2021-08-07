@@ -11,6 +11,7 @@ CREATE TABLE "contests" (
     "is_open" BOOLEAN NOT NULL DEFAULT true,
     "pictures_only" BOOLEAN NOT NULL DEFAULT false,
     "max_submissions" INTEGER NOT NULL DEFAULT 1,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY ("id")
 );

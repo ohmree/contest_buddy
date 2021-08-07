@@ -38,6 +38,7 @@ model Contest {
   maxSubmissions Int                   @default(1) @map("max_submissions")
   participants   ContestParticipants[]
   submissions    Submission[]
+  createdAt      DateTime              @default(now()) @map("created_at")
 
   @@map("contests")
 }

@@ -11,6 +11,7 @@ Table Contest {
   maxSubmissions Int [not null, default: 1]
   participants ContestParticipants [not null]
   submissions Submission [not null]
+  createdAt DateTime [default: `now()`, not null]
 }
 
 Table Submission {

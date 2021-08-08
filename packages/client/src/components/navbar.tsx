@@ -3,6 +3,15 @@ import {Link} from 'solid-app-router';
 
 const Navbar: Component = () => {
   const [isOpen, setOpen] = createSignal(false);
+
+  document.addEventListener('click', (event: Event) => {
+    if (document.querySelector('#mobile-menu-button')?.contains(event.target as Node)) {
+      setOpen(!isOpen());
+    } else {
+      setOpen(false);
+    }
+  });
+
   return (
     <nav class="bg-white shadow dark:bg-gray-800">
       <div class="container px-6 py-3 mx-auto md:flex">
@@ -19,7 +28,7 @@ const Navbar: Component = () => {
           {/* Mobile menu button */}
           <div class="flex md:hidden">
             <button
-              onClick={() => setOpen(!isOpen())}
+              id="mobile-menu-button"
               type="button"
               class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
               aria-label="toggle menu"

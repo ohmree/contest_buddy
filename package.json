@@ -45,9 +45,9 @@
     "build:server": "pnpm m run build --filter server",
     "build": "pnpm m run build",
     "start": "pnpm m run start --filter server",
-    "lint": "xo packages/",
+    "lint": "xo",
     "fix": "xo --fix",
-    "clean": "pnpm m run clean --filter server client"
+    "clean": "pnpm m run clean"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

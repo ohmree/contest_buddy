@@ -43,7 +43,7 @@ const Contests: Component = () => {
                 border="b-1 gray-300 dark:gray-600"
                 divide="x gray-300 dark:gray-600"
               >
-                <td text="center gray-700 dark:gray-200 md:lg">
+                <td text="center gray-700 hover:gray-800 dark:gray-200 dark:hover:gray-400 md:lg">
                   <Link href={`/contests/${contest.id}`}>{contest.name}</Link>
                 </td>
                 <td text="center gray-700 dark:gray-200 md:lg">

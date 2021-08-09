@@ -50,10 +50,10 @@
     "clean": "pnpm m run clean --filter server client"
   },
   "devDependencies": {
-    "concurrently": "^6.2.0",
+    "concurrently": "^6.2.1",
     "cross-env": "^7.0.3",
     "eslint-plugin-solid": "^0.1.1",
     "rimraf": "^3.0.2",
-    "xo": "^0.42.0"
+    "xo": "^0.44.0"
   }
 }

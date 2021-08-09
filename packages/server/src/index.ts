@@ -13,6 +13,8 @@ import {Client} from '@typeit/discord';
 import * as dotenv from '@tinyhttp/dotenv';
 import Validator from 'fastest-validator';
 import {AppDiscord} from './discords/app-discord';
+import Conf from 'conf';
+import { GuildChannel } from 'discord.js';
 
 const {PrismaClient} = prisma_pkg;
 
@@ -27,6 +29,7 @@ if (dotenvResult.error) {
 
 const prisma = new PrismaClient();
 
+const config = new Conf<Record<string, string>>({cwd: path.resolve(dirname, '..')})
 const app = new App({settings: {networkExtensions: true}});
 const api = new App({settings: {networkExtensions: true}});
 const isProd = process.env['NODE_ENV'] === 'production';
@@ -46,17 +49,38 @@ const MAX_API_RETURNS = 50;
 async function main() {
   // Bot config
   const discordToken = process.env['DISCORD_TOKEN'];
+  const discordGuildId = process.env['DISCORD_GUILD_ID'];
+  const discordCategoryName = process.env['DISCORD_CATEGORY_NAME'];
+
+  if (!discordToken || !discordGuildId || !discordCategoryName) {
+    throw new Error('Must supply discord bot token, guild ID and category name');
+  }
+
   const discordClient = new Client({
     classes: [AppDiscord],
     silent: false,
     variablesChar: ':'
   });
 
-  if (!discordToken) {
-    throw new Error('Must supply discord bot token');
+  await discordClient.login(discordToken);
+
+  let discordGuild = discordClient.guilds.resolve(discordGuildId);
+
+  if (!discordGuild) {
+    throw new Error(`Can't find server with id ${discordGuildId}`);
   }
 
-  await discordClient.login(discordToken);
+  // HACK: this feels a bit kludgy.
+  let discordCategory: GuildChannel | null;
+  let discordCategoryId: string | null = config.get('discordCategoryId');
+  if (discordCategoryId) {
+    discordCategory = discordGuild.channels.resolve(discordCategoryId);
+  } else {
+    console.debug(`Creating category ${discordCategoryName}`)
+    discordCategory = await discordGuild.channels.create(discordCategoryName, {type: 'category'});
+    config.set('discordCategoryId', discordCategory.id);
+    discordCategoryId = discordCategory.id;
+  }
 
   // Frontend and API endpoint config.
   api
@@ -138,7 +162,6 @@ async function main() {
       response.end();
     })
     .post('/contests', async (request, response) => {
-      console.debug('here');
       const body: Record<string, any> =
         (request.body as Record<string, any>) ?? {};
       const validOrError = checkContest(body);
@@ -166,6 +189,12 @@ async function main() {
             }
           }
         });
+
+        // HACK: IDK how I feel about this.
+        if (discordCategory) {
+          discordGuild?.channels.create(contest.name, {parent: discordCategory})
+        }
+
         response.status(200).send(contest);
       } else {
         response.status(422).send({status: 422, errors: validOrError});

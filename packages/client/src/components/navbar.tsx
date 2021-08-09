@@ -4,8 +4,10 @@ import {Link} from 'solid-app-router';
 const Navbar: Component = () => {
   const [isOpen, setOpen] = createSignal(false);
 
+  let mobileMenuButton!: HTMLButtonElement;
+
   document.addEventListener('click', (event: Event) => {
-    if (document.querySelector('#mobile-menu-button')?.contains(event.target as Node)) {
+    if (mobileMenuButton.contains(event.target as Node)) {
       setOpen(!isOpen());
     } else {
       setOpen(false);
@@ -28,7 +30,7 @@ const Navbar: Component = () => {
           {/* Mobile menu button */}
           <div class="flex md:hidden">
             <button
-              id="mobile-menu-button"
+              ref={mobileMenuButton}
               type="button"
               class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
               aria-label="toggle menu"

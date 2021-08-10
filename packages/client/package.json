@@ -21,6 +21,7 @@
     "xo": "^0.44.0"
   },
   "dependencies": {
+    "@felte/solid": "^0.1.9",
     "solid-app-router": "^0.1.4",
     "solid-js": "^1.1.0",
     "solid-slider": "^1.0.0"

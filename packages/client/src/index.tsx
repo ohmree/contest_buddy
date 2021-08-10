@@ -11,6 +11,7 @@ const Users = lazy(async () => import('./pages/users'));
 const User = lazy(async () => import('./pages/users/[id]'));
 const Contests = lazy(async () => import('./pages/contests'));
 const Contest = lazy(async () => import('./pages/contests/[id]'));
+const NewContest = lazy(async () => import('./pages/contests/new'));
 
 const App: Component = () => (
   <>
@@ -20,7 +21,8 @@ const App: Component = () => (
       <Route path="/users/:id" element={<User />} />
       <Route path="/contests" element={<Contests />} />
       <Route path="/contests/:id" element={<Contest />} />
-      <Route path="/" component={Index} />
+      <Route path="/contests/new" element={<NewContest />} />
+      <Route path="/" element={<Index />} />
       {/* <Route path="/*all" element={<NotFound />} /> */}
     </Routes>
   </>

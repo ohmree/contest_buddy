@@ -16,6 +16,7 @@ importers:
 
   packages/client:
     specifiers:
+      '@felte/solid': ^0.1.9
       dirname-filename-esm: ^1.1.1
       eslint-import-resolver-typescript: ^2.4.0
       eslint-plugin-solid: ^0.1.1
@@ -33,6 +34,7 @@ importers:
       windicss: ^3.1.7
       xo: ^0.44.0
     dependencies:
+      '@felte/solid': 0.1.9_solid-js@1.1.0
       solid-app-router: 0.1.4_solid-js@1.1.0
       solid-js: 1.1.0
       solid-slider: 1.0.0_solid-js@1.1.0
@@ -528,6 +530,25 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@felte/common/0.4.10:
+    resolution: {integrity: sha512-a1uAQcQMQdjki9A8zYJdKOfiZMHu7MD7LwKvSZxkyJzPF1DLDQzSumoKLiwtXxzErwBF2wRh1y8ILzMgjLJ8Ug==}
+    dev: false
+
+  /@felte/core/0.1.6:
+    resolution: {integrity: sha512-Rrq4r5fWb0dNXIe21sy1ciQ2hX7ck6pYhZUP4Istqrwik26EElXCGapwjIeU0VGWY9SEKbyPg7ay3RYV21qb5Q==}
+    dependencies:
+      '@felte/common': 0.4.10
+    dev: false
+
+  /@felte/solid/0.1.9_solid-js@1.1.0:
+    resolution: {integrity: sha512-45OGeuolm03K44+TzyZ6oxJ9tc2uU4pAMODxSAgr8W3C0q5D6QjpHk+DYItqOG9RuR69aVwmUFTqyqF2/sbDDg==}
+    peerDependencies:
+      solid-js: ^1.0.0
+    dependencies:
+      '@felte/core': 0.1.6
+      solid-js: 1.1.0
+    dev: false
 
   /@graphile/lru/4.11.0:
     resolution: {integrity: sha512-Fakuk190EAKxWSa9YQyr/87g8mvAv8HBvk6yPCPuIoA3bYXF7n6kl0XSqKjSd5VfjEqhtnzQ6zJGzDf1Gv/tJg==}

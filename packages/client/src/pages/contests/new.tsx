@@ -16,7 +16,7 @@ const New: Component = () => {
     // ...
   });
   return (
-    <section class="max-w-4xl p-6 mx-auto mt-2 bg-white rounded-md shadow-md dark:bg-gray-800">
+    <section class="absolute top-1/2 right-1/2 transform-gpu -translate-y-1/2 translate-x-1/2 max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
         <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Create a new contest</h2>
 
         <form use:form={form}>

@@ -4,7 +4,9 @@
 
 Table Server {
   id String [pk]
-  discordId String [not null]
+  discordId String [unique, not null]
+  categoryName String [not null, default: 'contests']
+  categoryId String [unique]
   contests Contest [not null]
   users ServerUsers [not null]
 }
@@ -35,9 +37,10 @@ Table Submission {
 
 Table User {
   id String [pk]
+  discordId String [unique, not null]
   discordTag String [unique, not null]
-  twitchName String [unique, not null]
-  twitchDisplayName String [unique, not null]
+  twitchName String
+  twitchDisplayName String [unique]
   contests ContestParticipants [not null]
   servers ServerUsers [not null]
   submissions Submission [not null]

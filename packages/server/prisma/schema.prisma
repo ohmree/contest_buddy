@@ -27,10 +27,13 @@ generator dbml {
 }
 
 model Server {
-  id        String        @id @default(dbgenerated("id_encode(nextval('contests_id_seq'::text))"))
-  discordId String        @map("discord_id")
-  contests  Contest[]
-  users     ServerUsers[]
+  id           String        @id @default(dbgenerated("id_encode(nextval('contests_id_seq'::text))"))
+  discordId    String        @unique @map("discord_id")
+  categoryName String        @default("contests") @map("category_name")
+  // TODO: rename this to `categoryDiscordId`.
+  categoryId   String?       @unique @map("category_id")
+  contests     Contest[]
+  users        ServerUsers[]
 
   @@map("servers")
 }
@@ -67,11 +70,11 @@ model Submission {
 
 model User {
   id                String                @id @default(dbgenerated("id_encode(nextval('users_id_seq'::text))"))
-  // TODO: maybe add discord user id?
+  discordId         String                @unique @map("discord_id")
   discordTag        String                @unique @map("discord_tag")
-  twitchName        String                @unique @map("twitch_name")
+  twitchName        String?               @map("twitch_name")
   // TODO: decide if we need this.
-  twitchDisplayName String                @unique @map("twitch_display_name")
+  twitchDisplayName String?               @unique @map("twitch_display_name")
   contests          ContestParticipants[]
   servers           ServerUsers[]
   submissions       Submission[]

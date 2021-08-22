@@ -12,8 +12,10 @@ function randomUserData(): Prisma.UserCreateInput {
   const userName = faker.unique(faker.internet.userName);
   const discordTag = `${userName}#${tagNumber}`;
   const profileUrl = faker.unique(faker.internet.avatar);
+  const discordId = faker.unique(faker.datatype.uuid);
 
   return {
+    discordId,
     discordTag,
     twitchDisplayName: userName,
     twitchName: userName.toLowerCase(),
@@ -37,11 +39,13 @@ async function main() {
   const server = await prisma.server.create({
     data: {
       discordId: faker.unique(faker.datatype.uuid),
+      categoryName: 'Contests',
+      categoryId: faker.unique(faker.datatype.uuid),
       users: {
         create: users.map(u => {
           return {user: {connect: {id: u.id}}}
         })
-      }
+      },
     }
   });
   console.log(`Created server with id: ${server.id}`);

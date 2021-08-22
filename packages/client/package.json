@@ -21,6 +21,7 @@
     "xo": "^0.44.0"
   },
   "dependencies": {
+    "@amoutonbrady/solid-heroicons": "^0.8.0",
     "@felte/solid": "^0.1.9",
     "solid-app-router": "^0.1.4",
     "solid-js": "^1.1.0",

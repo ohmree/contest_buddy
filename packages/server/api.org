@@ -1,34 +1,24 @@
-#+PROPERTY: header-args:restclient :var api="http://localhost:4000/api"
+#+PROPERTY: header-args:restclient :var root="http://localhost:4000/api" :var api=":root/servers/jR"
 * TODO
  - [ ] Figure out why getting users by contest id and contests by user id returns an empty array.
 * API
 Everything returns up to 50 results, always.
-** Users
-*** Get by ID(s)
+** Servers
+*** Get by ID
 **** With valid input
 #+BEGIN_SRC restclient
-GET :api/users?id=0v&id=1R
+GET :root/servers/jR
 #+END_SRC
 
 #+RESULTS:
 #+BEGIN_SRC js
-[
-    {
-        "id": "0v",
-        "discordTag": "Amari.Orn53#9628",
-        "twitchName": "amari.orn53",
-        "twitchDisplayName": "Amari.Orn53",
-        "profileUrl": "https://cdn.fakercloud.com/avatars/shinze_128.jpg"
-    },
-    {
-        "id": "1R",
-        "discordTag": "Amani_Oberbrunner#1842",
-        "twitchName": "amani_oberbrunner",
-        "twitchDisplayName": "Amani_Oberbrunner",
-        "profileUrl": "https://cdn.fakercloud.com/avatars/hasslunsford_128.jpg"
-    }
-]
-// GET http://localhost:4000/api/users?id=0v&id=1R
+{
+  "id": "jR",
+  "discordId": "1ff0531b-46cc-4c01-af16-0feb4ac21f0b",
+  "categoryName": "Contests",
+  "categoryId": "54afa511-d2f4-4554-ab34-1c5a84980879"
+}
+// GET http://localhost:4000/api/servers/jR
 // HTTP/1.1 200 OK
 // Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
 // X-DNS-Prefetch-Control: off
@@ -43,14 +33,100 @@ GET :api/users?id=0v&id=1R
 // Access-Control-Allow-Origin: *
 // Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
 // Access-Control-Allow-Headers: content-type
+// X-Powered-By: tinyhttp
+// etag: W/"9d-mW3/LU04YY/rHwU60IhCtlQLNNQ"
 // Content-Type: application/json
-// Date: Thu, 05 Aug 2021 15:22:24 GMT
+// Date: Sun, 22 Aug 2021 12:10:43 GMT
 // Connection: keep-alive
 // Keep-Alive: timeout=5
-// Content-Length: 438
-// Request duration: 0.007929s
+// Content-Length: 157
+// Request duration: 0.035115s
 #+END_SRC
 **** With invalid input
+#+BEGIN_SRC restclient
+GET :root/servers/invalidInput
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "status": 404,
+  "message": "Server not found"
+}
+// GET http://localhost:4000/api/servers/invalidInput
+// HTTP/1.1 404 Not Found
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-DNS-Prefetch-Control: off
+// Expect-CT: max-age=0
+// X-Frame-Options: SAMEORIGIN
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// X-Download-Options: noopen
+// X-Content-Type-Options: nosniff
+// X-Permitted-Cross-Domain-Policies: none
+// Referrer-Policy: no-referrer
+// X-XSS-Protection: 0
+// Access-Control-Allow-Origin: *
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// Access-Control-Allow-Headers: content-type
+// X-Powered-By: tinyhttp
+// etag: W/"34-WJS7FhfR3XhhS8jCBtUrxSLurd4"
+// Content-Type: application/json
+// Date: Sun, 22 Aug 2021 12:11:14 GMT
+// Connection: keep-alive
+// Keep-Alive: timeout=5
+// Content-Length: 52
+// Request duration: 0.323529s
+#+END_SRC
+*** Users
+**** Get by ID(s)
+***** With valid input
+#+BEGIN_SRC restclient
+GET :api/users?id=0v&id=1R
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC js
+[
+  {
+    "id": "0v",
+    "discordTag": "Norbert_Medhurst#1761",
+    "twitchName": "norbert_medhurst",
+    "twitchDisplayName": "Norbert_Medhurst",
+    "profileUrl": "https://cdn.fakercloud.com/avatars/chatyrko_128.jpg"
+  },
+  {
+    "id": "1R",
+    "discordTag": "Aimee_Tromp98#3012",
+    "twitchName": "aimee_tromp98",
+    "twitchDisplayName": "Aimee_Tromp98",
+    "profileUrl": "https://cdn.fakercloud.com/avatars/blakesimkins_128.jpg"
+  }
+]
+// GET http://localhost:4000/api/servers/jR/users?id=0v&id=1R
+// HTTP/1.1 200 OK
+// Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+// X-DNS-Prefetch-Control: off
+// Expect-CT: max-age=0
+// X-Frame-Options: SAMEORIGIN
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// X-Download-Options: noopen
+// X-Content-Type-Options: nosniff
+// X-Permitted-Cross-Domain-Policies: none
+// Referrer-Policy: no-referrer
+// X-XSS-Protection: 0
+// Access-Control-Allow-Origin: *
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// Access-Control-Allow-Headers: content-type
+// X-Powered-By: tinyhttp
+// etag: W/"1bb-zfzkmxQmNqI6PdA8NFuoWPpzvzM"
+// Content-Type: application/json
+// Date: Sun, 22 Aug 2021 10:50:30 GMT
+// Connection: keep-alive
+// Keep-Alive: timeout=5
+// Content-Length: 443
+// Request duration: 0.007683s
+#+END_SRC
+***** With invalid input
 #+BEGIN_SRC restclient
 GET :api/users
 #+END_SRC
@@ -61,31 +137,31 @@ GET :api/users
   "status": 422,
   "message": "Must specify at least 1 user ID or exactly 1 contest ID"
 }
-// GET http://localhost:4000/api/users
+// GET http://localhost:4000/api/servers/jR/users
 // HTTP/1.1 422 Unprocessable Entity
-// Content-Type: application/json
-// Content-Length: 91
-// Connection: keep-alive
-// Status: 422 Unprocessable Entity
-// X-DNS-Prefetch-Control: off
-// Access-Control-Allow-Origin: *
-// Date: Fri, 06 Aug 2021 19:54:25 GMT
-// Strict-Transport-Security: max-age=15552000; includeSubDomains
-// Referrer-Policy: no-referrer
-// X-Permitted-Cross-Domain-Policies: none
-// Expect-CT: max-age=0
-// X-XSS-Protection: 0
-// Access-Control-Allow-Headers: content-type
-// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
-// X-Download-Options: noopen
-// X-Frame-Options: SAMEORIGIN
-// X-Content-Type-Options: nosniff
 // Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
-// X-Powered-By: Phusion Passenger(R) 6.0.9
-// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
-// Request duration: 3.191832s
+// X-DNS-Prefetch-Control: off
+// Expect-CT: max-age=0
+// X-Frame-Options: SAMEORIGIN
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// X-Download-Options: noopen
+// X-Content-Type-Options: nosniff
+// X-Permitted-Cross-Domain-Policies: none
+// Referrer-Policy: no-referrer
+// X-XSS-Protection: 0
+// Access-Control-Allow-Origin: *
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// Access-Control-Allow-Headers: content-type
+// X-Powered-By: tinyhttp
+// etag: W/"5b-mg9uy2uyVjZ0159UzZwo8vzYYrQ"
+// Content-Type: application/json
+// Date: Sun, 22 Aug 2021 10:50:33 GMT
+// Connection: keep-alive
+// Keep-Alive: timeout=5
+// Content-Length: 91
+// Request duration: 0.006755s
 #+END_SRC
-*** Get by contest
+**** Get by contest
 #+BEGIN_SRC restclient
 GET :api/users?contest_id=jR
 #+END_SRC
@@ -93,33 +169,33 @@ GET :api/users?contest_id=jR
 #+RESULTS:
 #+BEGIN_SRC js
 []
-// GET http://localhost:4000/api/users?contest_id=jR
+// GET http://localhost:4000/api/servers/jR/users?contest_id=jR
 // HTTP/1.1 200 OK
-// Content-Type: application/json
-// Content-Length: 2
-// Connection: keep-alive
-// Status: 200 OK
-// X-DNS-Prefetch-Control: off
-// Access-Control-Allow-Origin: *
-// Date: Fri, 06 Aug 2021 21:30:14 GMT
-// Strict-Transport-Security: max-age=15552000; includeSubDomains
-// Referrer-Policy: no-referrer
-// X-Permitted-Cross-Domain-Policies: none
-// Expect-CT: max-age=0
-// X-XSS-Protection: 0
-// Access-Control-Allow-Headers: content-type
-// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
-// X-Download-Options: noopen
-// X-Frame-Options: SAMEORIGIN
-// X-Content-Type-Options: nosniff
 // Content-Security-Policy: default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
-// X-Powered-By: Phusion Passenger(R) 6.0.9
-// Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
-// Request duration: 4.626129s
+// X-DNS-Prefetch-Control: off
+// Expect-CT: max-age=0
+// X-Frame-Options: SAMEORIGIN
+// Strict-Transport-Security: max-age=15552000; includeSubDomains
+// X-Download-Options: noopen
+// X-Content-Type-Options: nosniff
+// X-Permitted-Cross-Domain-Policies: none
+// Referrer-Policy: no-referrer
+// X-XSS-Protection: 0
+// Access-Control-Allow-Origin: *
+// Access-Control-Allow-Methods: GET, HEAD, PUT, PATCH, POST, DELETE
+// Access-Control-Allow-Headers: content-type
+// X-Powered-By: tinyhttp
+// etag: W/"2-l9Fw4VUO7kr8CvBlt4zaMCqXZ0w"
+// Content-Type: application/json
+// Date: Sun, 22 Aug 2021 10:50:42 GMT
+// Connection: keep-alive
+// Keep-Alive: timeout=5
+// Content-Length: 2
+// Request duration: 0.012277s
 #+END_SRC
 
-** Contests
-*** Get all
+*** Contests
+**** Get all
 #+BEGIN_SRC restclient
 GET :api/contests
 #+END_SRC
@@ -160,7 +236,7 @@ GET :api/contests
 // Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
 // Request duration: 4.972696s
 #+END_SRC
-*** Get by ID(s)
+**** Get by ID(s)
 This includes user IDs.
 #+BEGIN_SRC restclient
 GET :api/contests?id=jR
@@ -210,7 +286,7 @@ GET :api/contests?id=jR
 // Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
 // Request duration: 4.722427s
 #+END_SRC
-*** Get by participant
+**** Get by participant
 #+BEGIN_SRC restclient
 GET :api/contests?user_id=0v
 #+END_SRC
@@ -242,8 +318,8 @@ GET :api/contests?user_id=0v
 // Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
 // Request duration: 4.438958s
 #+END_SRC
-*** Create new contest
-**** With valid input
+**** Create new contest
+***** With valid input
 #+BEGIN_SRC restclient
 POST :api/contests
 
@@ -291,7 +367,7 @@ POST :api/contests
 // Server: nginx/1.20.1 + Phusion Passenger(R) 6.0.9
 // Request duration: 4.205494s
 #+END_SRC
-**** With invalid input
+***** With invalid input
 #+BEGIN_SRC restclient
 POST :api/contests
 #+END_SRC

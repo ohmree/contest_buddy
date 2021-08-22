@@ -181,8 +181,6 @@ async function main() {
     variablesChar: ':'
   });
 
-  await discordClient.login(discordToken);
-
   discordClient.on('guildCreate', async guild => {
     console.debug(`Guild ${guild.name} created`);
     const {id: discordId} = guild;
@@ -244,20 +242,7 @@ async function main() {
     }
   })
 
-  // for (const server of await prisma.server.findMany({select: {id: true, categoryId: true, categoryName: true, discordId: true}})) {
-  //   const guild = discordClient.guilds.resolve(server.discordId);
-  //   if (guild) {
-  //     const category = guild.channels.resolve(server.categoryId ?? '');
-  //     if (!category) {
-  //       console.debug(`Creating category ${server.categoryName} in server ${guild.name}`)
-  //       const categoryId = await createCategory(guild, server);
-  //       prisma.server.update({
-  //         where: {id: server.id},
-  //         data: {categoryId}
-  //       })
-  //     }
-  //   }
-  // }
+  await discordClient.login(discordToken);
 
   const session = cookieSession({
     name: 'contest_buddy',

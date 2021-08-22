@@ -11,7 +11,7 @@ const Users: Component = () => {
   return (
     <Show when={!users.loading && !users.error} fallback="Loading...">
       <ul>
-        <For each={users()!}>
+        <For each={users()}>
           {(user, _i) => (
             <>
               <img src={user.profileUrl} />

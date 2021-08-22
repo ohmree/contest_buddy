@@ -6,11 +6,11 @@ export default defineConfig({
   darkMode: 'media',
   safelist: 'p-3 p-4 p-5',
   theme: {
-    extend: {}
+    extend: {},
   },
   attributify: true,
   plugins: [forms, typography],
   extract: {
-    include: ['src/**/*.tsx', 'index.html']
-  }
+    include: ['src/**/*.tsx', 'index.html'],
+  },
 });

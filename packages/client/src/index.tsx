@@ -40,5 +40,5 @@ render(
       <App bg="red-500" />
     </Router>
   ),
-  document.querySelector('#app')!
+  document.querySelector('#app')!,
 );

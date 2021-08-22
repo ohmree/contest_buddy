@@ -1,4 +1,5 @@
 import {AttributifyAttributes} from 'windicss/types/jsx';
+import {Form} from '@felte/solid';
 
 declare module 'solid-js' {
   namespace JSX {
@@ -7,5 +8,9 @@ declare module 'solid-js' {
     }
     interface SvgSVGAttributes<T> extends AttributifyAttributes {}
     interface IntrinsicAttributes extends AttributifyAttributes {}
+
+    interface Directives {
+      form: Form<any>['form'];
+    }
   }
 }

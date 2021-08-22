@@ -8,14 +8,14 @@ const graphql =
   async (
     request: ReqWithBody,
     response: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     if (request.headers['content-type'] === 'application/graphql') {
       await text()(request, response, () => {
         request.headers['content-type'] = 'application/json';
         request.body = {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          query: request.body
+          query: request.body,
         };
         next();
       });

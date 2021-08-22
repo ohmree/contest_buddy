@@ -11,7 +11,7 @@ export default defineConfig({
   build: {
     target: 'esnext',
     polyfillDynamicImport: false,
-    sourcemap: true
+    sourcemap: true,
   },
   plugins: [
     // ViteTips(),
@@ -20,8 +20,8 @@ export default defineConfig({
     windiCSS({
       scan: {
         // We only have to specify the file extensions we actually use.
-        fileExtensions: ['tsx', 'html']
-      }
-    })
-  ]
+        fileExtensions: ['tsx', 'html'],
+      },
+    }),
+  ],
 });

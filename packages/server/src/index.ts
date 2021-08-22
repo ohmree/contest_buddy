@@ -1,6 +1,9 @@
 // eslint-disable-next-line import/no-unassigned-import
 import 'reflect-metadata';
+// eslint-disable-next-line import/no-unassigned-import
+import _shims from '../shims';
 import path from 'node:path';
+import process from 'node:process';
 import {App} from '@tinyhttp/app';
 import {logger} from '@tinyhttp/logger';
 import {cors} from '@tinyhttp/cors';
@@ -12,82 +15,18 @@ import helmet from 'helmet';
 import {Client} from '@typeit/discord';
 import * as dotenv from '@tinyhttp/dotenv';
 import Validator from 'fastest-validator';
-import {AppDiscord} from './discords/app-discord';
 import cookieSession from 'cookie-session';
 import passport from 'passport';
 import {Strategy as DiscordStrategy} from 'passport-discord';
-import { Guild } from 'discord.js';
-
-declare module '@tinyhttp/app' {
-  export interface AuthInfo { }
-  export type User = Express.User;
-
-  interface CookieSessionOptions {
-    name?: string | undefined;
-    keys?: Array<string> | import('keygrip') | undefined;
-    secret?: string | undefined;
-    maxAge?: number | undefined;
-    expires?: Date | undefined;
-    path?: string | undefined;
-    domain?: string | undefined;
-    sameSite?: "strict" | "lax" | "none" | boolean | undefined;
-    secure?: boolean | undefined;
-    secureProxy?: boolean | undefined;
-    httpOnly?: boolean | undefined;
-    signed?: boolean | undefined;
-    overwrite?: boolean | undefined;
-  }
-
-  interface CookieSessionObject {
-    isChanged?: boolean | undefined;
-    isNew?: boolean | undefined;
-    isPopulated?: boolean | undefined;
-
-    [propertyName: string]: any;
-  }
-
-  interface CookieSessionRequest {
-    session?: CookieSessionObject | null | undefined;
-    sessionOptions: CookieSessionOptions;
-  }
-
-  export interface Request extends CookieSessionRequest {
-    authInfo?: AuthInfo | undefined;
-    user?: User | undefined;
-
-    // These declarations are merged into tinyhttp's Request type
-    login(user: User, done: (err: any) => void): void;
-    login(user: User, options: any, done: (err: any) => void): void;
-    logIn(user: User, done: (err: any) => void): void;
-    logIn(user: User, options: any, done: (err: any) => void): void;
-
-    logout(): void;
-    logOut(): void;
-
-    isAuthenticated(): this is AuthenticatedRequest;
-    isUnauthenticated(): this is UnauthenticatedRequest;
-  }
-
-  export interface AuthenticatedRequest extends Request {
-    user: User;
-  }
-
-  export interface UnauthenticatedRequest extends Request {
-    user?: undefined;
-  }
-}
-
-declare global {
-  namespace Express {
-    interface User extends prisma_pkg.User {}
-  }
-}
+import {Guild} from 'discord.js';
+import {AppDiscord} from './discords/app-discord';
+import {zip} from './utils';
 
 const {PrismaClient} = prisma_pkg;
 
 const dirname = getDirname(import.meta);
 const dotenvResult = dotenv.config({
-  path: path.resolve(dirname, '../.env.local')
+  path: path.resolve(dirname, '../.env.local'),
 });
 
 if (dotenvResult.error) {
@@ -100,9 +39,14 @@ if (!DISCORD_CLIENT_ID || !DISCORD_CLIENT_SECRET) {
   throw new Error('No discord client id and secret supplied.');
 }
 
-async function createCategory(guild: Guild, categoryName: string): Promise<string> {
-  console.debug(`Creating category ${categoryName} in server ${guild.name}`)
-  const {id: categoryId} = await guild.channels.create(categoryName, {type: 'category'});
+async function createCategory(
+  guild: Guild,
+  categoryName: string,
+): Promise<string> {
+  console.debug(`Creating category ${categoryName} in server ${guild.name}`);
+  const {id: categoryId} = await guild.channels.create(categoryName, {
+    type: 'category',
+  });
   return categoryId;
 }
 
@@ -119,34 +63,42 @@ passport.deserializeUser(async (id: string, done) => {
   }
 });
 
-passport.use(new DiscordStrategy({
-  clientID: DISCORD_CLIENT_ID,
-  clientSecret: DISCORD_CLIENT_SECRET,
-  callbackURL: 'http://localhost:4000/auth/callback',
-  scope: ['identify', 'guilds', 'connections', 'bot']
-}, async (_accessToken, _refreshToken, profile, cb) => {
-  try {
-    const twitchConnection = profile.connections?.find(connection => connection.type === 'twitch');
-    const discordId = profile.id;
-    const discordTag = `${profile.username}#${profile.discriminator}`;
-    const user = await prisma.user.upsert({
-      create: {
-        discordId,
-        profileUrl: profile.avatar,
-        discordTag,
-        twitchName: twitchConnection?.name,
-        twitchDisplayName: twitchConnection?.name
-      },
-      update: {},
-      where: {
-        discordId
+passport.use(
+  new DiscordStrategy(
+    {
+      clientID: DISCORD_CLIENT_ID,
+      clientSecret: DISCORD_CLIENT_SECRET,
+      callbackURL: 'http://localhost:4000/auth/callback',
+      scope: ['identify', 'guilds', 'connections', 'bot'],
+    },
+    async (_accessToken, _refreshToken, profile, cb) => {
+      try {
+        const twitchConnection = profile.connections?.find(
+          (connection) => connection.type === 'twitch',
+        );
+        const discordId = profile.id;
+        const discordTag = `${profile.username}#${profile.discriminator}`;
+        const user = await prisma.user.upsert({
+          create: {
+            discordId,
+            profileUrl: profile.avatar,
+            discordTag,
+            twitchName: twitchConnection?.name,
+            twitchDisplayName: twitchConnection?.name,
+          },
+          update: {},
+          where: {
+            discordId,
+          },
+        });
+        cb(null, user);
+        return;
+      } catch (error: unknown) {
+        cb(error as Error, undefined);
       }
-    });
-    return cb(null, user);
-  } catch (error: unknown) {
-    return cb(error as Error, undefined);
-  }
-}));
+    },
+  ),
+);
 
 const prisma = new PrismaClient();
 
@@ -162,7 +114,7 @@ const checkContest = validator.compile({
   isOpen: {type: 'boolean', optional: true, default: true},
   picturesOnly: {type: 'boolean', optional: true, default: false},
   maxSubmissions: 'number',
-  participantIds: {type: 'array', items: 'string', optional: true, default: []}
+  participantIds: {type: 'array', items: 'string', optional: true, default: []},
 });
 
 const MAX_API_RETURNS = 50;
@@ -178,56 +130,75 @@ async function main() {
   const discordClient = new Client({
     classes: [AppDiscord],
     silent: false,
-    variablesChar: ':'
+    variablesChar: ':',
   });
 
-  discordClient.on('guildCreate', async guild => {
+  discordClient.on('guildCreate', async (guild) => {
     console.debug(`Guild ${guild.name} created`);
     const {id: discordId} = guild;
     const categoryId = await createCategory(guild, 'contests');
     await prisma.server.create({
       data: {
         discordId,
-        categoryId
-      }
+        categoryId,
+      },
     });
   });
 
   discordClient.on('ready', async () => {
-    for (const {id, categoryId, categoryName, discordId} of await prisma.server.findMany({
+    let categoryIds = [];
+    const serverIds = [];
+    for (const {
+      id,
+      categoryId,
+      categoryName,
+      discordId,
+    } of await prisma.server.findMany({
       select: {
         id: true,
         categoryId: true,
         categoryName: true,
-        discordId: true
-      }
+        discordId: true,
+      },
     })) {
       const guild = discordClient.guilds.resolve(discordId);
       const category = guild?.channels.resolve(categoryId ?? '');
       if (guild && !category) {
-        const newCategoryId = await createCategory(guild, categoryName);
-        await prisma.server.update({
-          where: {id},
-          data: {categoryId: newCategoryId}
-        });
+        categoryIds.push(createCategory(guild, categoryName));
+        serverIds.push(id);
       }
     }
+
+    categoryIds = await Promise.all(categoryIds);
+    const servers = [];
+    for (const [categoryId, serverId] of zip(categoryIds, serverIds)) {
+      servers.push(
+        prisma.server.update({
+          where: {
+            id: serverId,
+          },
+          data: {categoryId},
+        }),
+      );
+    }
+
+    void (await Promise.all(servers));
   });
 
-  discordClient.on('guildDelete', async guild => {
+  discordClient.on('guildDelete', async (guild) => {
     console.debug(`Guild ${guild.name} deleted`);
     try {
       await prisma.server.delete({where: {discordId: guild.id}});
     } catch {}
   });
 
-  discordClient.on('channelDelete', async channel => {
+  discordClient.on('channelDelete', async (channel) => {
     if (channel.type === 'category') {
       // Channel IDs are guaranteed to be unique:
       // https://www.reddit.com/r/discordapp/comments/6vm67d/are_channel_ids_universally_unique/
       const server = await prisma.server.findFirst({
         select: {id: true, discordId: true, categoryName: true},
-        where: {categoryId: channel.id}
+        where: {categoryId: channel.id},
       });
       if (server) {
         const guild = discordClient.guilds.resolve(server.discordId);
@@ -235,21 +206,20 @@ async function main() {
           const categoryId = await createCategory(guild, server.categoryName);
           await prisma.server.update({
             where: {id: server.id},
-            data: {categoryId}
-          })
+            data: {categoryId},
+          });
         }
       }
     }
-  })
+  });
 
   await discordClient.login(discordToken);
 
   const session = cookieSession({
     name: 'contest_buddy',
     secret: process.env['SECRET_COOKIE_PASSWORD']!,
-    secure: process.env['NODE_ENV'] === 'production'
+    secure: process.env['NODE_ENV'] === 'production',
   });
-
 
   // Frontend and API endpoint config.
   serversApi
@@ -262,33 +232,34 @@ async function main() {
     })
     .get('/', async (request, response) => {
       const userId = request?.user?.discordId;
-      const guilds = discordClient
-        .guilds
-        .cache
+      const guilds = discordClient.guilds.cache
         .array()
-        .filter(guild => guild.ownerID === userId)
-        .map(async guild => {
+        .filter((guild) => guild.ownerID === userId)
+        .map(async (guild) => {
           const {id: discordId, name, icon} = guild;
           const id = await prisma.server.findUnique({
             where: {discordId},
-            select: {id: true}
+            select: {id: true},
           });
           return {
             id,
             discordId,
             name,
-            icon
+            icon,
           };
         });
       response.status(200).send(guilds).end();
     })
     .get('/:serverId', async (request, response) => {
-      const server = await prisma.server.findUnique({where: {id: request.params['serverId']}});
+      const server = await prisma.server.findUnique({
+        where: {id: request.params['serverId']},
+      });
       if (server) {
         response.status(200).send(server);
       } else {
         response.status(404).send({status: 404, message: 'Server not found'});
       }
+
       response.end();
     })
     .get('/users', async (request, response) => {
@@ -300,27 +271,27 @@ async function main() {
             id: {in: userIds},
             servers: {
               some: {
-                serverId: request.params['serverId']
-              }
-            }
+                serverId: request.params['serverId'],
+              },
+            },
           },
-          take: MAX_API_RETURNS
+          take: MAX_API_RETURNS,
         });
         response.status(200).send(users);
       } else if (contestId) {
         const users = await prisma.user.findMany({
           where: {
             contests: {
-              some: {contestId}
-            }
+              some: {contestId},
+            },
           },
-          take: MAX_API_RETURNS
+          take: MAX_API_RETURNS,
         });
         response.status(200).send(users);
       } else {
         response.status(422).send({
           status: 422,
-          message: 'Must specify at least 1 user ID or exactly 1 contest ID'
+          message: 'Must specify at least 1 user ID or exactly 1 contest ID',
         });
       }
 
@@ -333,29 +304,29 @@ async function main() {
         const contests = await prisma.contest.findMany({
           where: {
             id: {in: contestIds},
-            serverId: request.params['serverId']
+            serverId: request.params['serverId'],
           },
           include: {
             participants: {
-              select: {userId: true}
-            }
+              select: {userId: true},
+            },
           },
-          take: MAX_API_RETURNS
+          take: MAX_API_RETURNS,
         });
         response.status(200).send(contests);
       } else if (userId) {
         const contests = await prisma.contest.findMany({
           where: {
             participants: {
-              some: {userId}
-            }
+              some: {userId},
+            },
           },
-          take: MAX_API_RETURNS
+          take: MAX_API_RETURNS,
         });
         response.status(200).send(contests);
       } else {
         const contests = await prisma.contest.findMany({
-          take: MAX_API_RETURNS
+          take: MAX_API_RETURNS,
         });
         response.status(200).send(contests);
       }
@@ -363,7 +334,7 @@ async function main() {
       response.end();
     })
     .post('/contests', async (request, response) => {
-      if (request.session && request.session['user']) {
+      if (request?.session?.user) {
         const body: Record<string, any> =
           (request.body as Record<string, any>) ?? {};
         const validOrError = checkContest(body);
@@ -375,10 +346,9 @@ async function main() {
           const picturesOnly = body['picturesOnly'] as boolean;
           const maxSubmissions = body['maxSubmissions'] as number;
 
-
           const participantIds: [string] = body['participantIds'] as [string];
           const users = participantIds.map((id: string) => ({
-            user: {connect: {id}}
+            user: {connect: {id}},
           }));
           const contest = await prisma.contest.create({
             data: {
@@ -388,14 +358,14 @@ async function main() {
               picturesOnly,
               maxSubmissions,
               participants: {
-                create: users
+                create: users,
               },
               server: {
                 connect: {
-                  id: request.params['serverId']
-                }
-              }
-            }
+                  id: request.params['serverId'],
+                },
+              },
+            },
           });
 
           response.status(200).send(contest);
@@ -421,7 +391,7 @@ async function main() {
       }
     })
     .all('/unauthorized', (_request, response) => {
-      response.status(401).send({status: 401, errors: ['Unauthorized']})
+      response.status(401).send({status: 401, errors: ['Unauthorized']});
     })
     .use('/servers', serversApi);
 
@@ -433,9 +403,13 @@ async function main() {
     .use(passport.initialize() as any)
     .use(passport.session())
     .get('/auth', passport.authenticate('discord', {permissions: 16} as any))
-    .get('/auth/callback', passport.authenticate('discord', {failureRedirect: '/'}), (_request, response) => {
-      response.redirect('http://localhost:3000/');
-    })
+    .get(
+      '/auth/callback',
+      passport.authenticate('discord', {failureRedirect: '/'}),
+      (_request, response) => {
+        response.redirect('http://localhost:3000/');
+      },
+    )
     .use('/api', api);
 
   if (isProd) {
@@ -445,4 +419,4 @@ async function main() {
   app.listen(4000);
 }
 
-main().finally(async () => void await prisma.$disconnect());
+main().finally(async () => prisma.$disconnect());

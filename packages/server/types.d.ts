@@ -1,4 +1,8 @@
-import {User as _User, Contest as _Contest, Server as _Server} from '@prisma/client';
+import {
+  User as _User,
+  Contest as _Contest,
+  Server as _Server,
+} from '@prisma/client';
 
 export type User = _User;
 export type Contest = _Contest;

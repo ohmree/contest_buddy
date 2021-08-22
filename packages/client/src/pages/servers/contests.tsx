@@ -37,7 +37,7 @@ const Contests: Component = () => {
           </tr>
         </thead>
         <tbody>
-          <For each={contests()!}>
+          <For each={contests()}>
             {(contest, _i) => (
               <tr
                 border="b-1 gray-300 dark:gray-600"

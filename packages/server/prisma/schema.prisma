@@ -6,9 +6,11 @@
 // CREATE SEQUENCE contests_id_seq AS integer;
 // CREATE SEQUENCE submissions_id_seq AS integer;
 // CREATE SEQUENCE users_id_seq AS integer;
+// CREATE SEQUENCE servers_id_seq AS integer;
 // ALTER SEQUENCE contests_id_seq OWNED BY contests.id;
 // ALTER SEQUENCE submissions_id_seq OWNED BY submissions.id;
 // ALTER SEQUENCE users_id_seq OWNED BY users.id;
+// ALTER SEQUENCE servers_id_seq OWNED BY servers.id;
 
 datasource db {
   provider = "postgresql"
@@ -20,12 +22,17 @@ generator client {
   previewFeatures = ["nApi", "orderByRelation", "selectRelationCount", "referentialActions", "orderByAggregateGroup"]
 }
 
-// generator typegraphql {
-//   provider = "typegraphql-prisma"
-// }
-
 generator dbml {
   provider = "prisma-dbml-generator"
+}
+
+model Server {
+  id        String        @id @default(dbgenerated("id_encode(nextval('contests_id_seq'::text))"))
+  discordId String        @map("discord_id")
+  contests  Contest[]
+  users     ServerUsers[]
+
+  @@map("servers")
 }
 
 model Contest {
@@ -39,6 +46,8 @@ model Contest {
   participants   ContestParticipants[]
   submissions    Submission[]
   createdAt      DateTime              @default(now()) @map("created_at")
+  server         Server                @relation(fields: [serverId], references: [id])
+  serverId       String                @map("server_id")
 
   @@map("contests")
 }
@@ -64,6 +73,7 @@ model User {
   // TODO: decide if we need this.
   twitchDisplayName String                @unique @map("twitch_display_name")
   contests          ContestParticipants[]
+  servers           ServerUsers[]
   submissions       Submission[]
   profileUrl        String                @map("profile_url")
 
@@ -78,4 +88,14 @@ model ContestParticipants {
 
   @@id([userId, contestId])
   @@map("contest_participants")
+}
+
+model ServerUsers {
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String @map("user_id")
+  server   Server @relation(fields: [serverId], references: [id])
+  serverId String @map("server_id")
+
+  @@id([userId, serverId])
+  @@map("server_users")
 }

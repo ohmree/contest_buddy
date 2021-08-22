@@ -38,6 +38,7 @@
     }
   },
   "scripts": {
+    "dev:db": "docker-compose up -d",
     "dev:client": "pnpm m run dev --filter client",
     "dev:server": "pnpm m run dev --filter server",
     "dev": "pnpm m run dev",

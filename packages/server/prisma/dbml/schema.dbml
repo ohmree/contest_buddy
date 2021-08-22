@@ -2,6 +2,13 @@
 //// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 //// ------------------------------------------------------
 
+Table Server {
+  id String [pk]
+  discordId String [not null]
+  contests Contest [not null]
+  users ServerUsers [not null]
+}
+
 Table Contest {
   id String [pk]
   name String [not null]
@@ -12,6 +19,8 @@ Table Contest {
   participants ContestParticipants [not null]
   submissions Submission [not null]
   createdAt DateTime [default: `now()`, not null]
+  server Server [not null]
+  serverId String [not null]
 }
 
 Table Submission {
@@ -30,6 +39,7 @@ Table User {
   twitchName String [unique, not null]
   twitchDisplayName String [unique, not null]
   contests ContestParticipants [not null]
+  servers ServerUsers [not null]
   submissions Submission [not null]
   profileUrl String [not null]
 }
@@ -45,6 +55,19 @@ Table ContestParticipants {
   }
 }
 
+Table ServerUsers {
+  user User [not null]
+  userId String [not null]
+  server Server [not null]
+  serverId String [not null]
+
+  indexes {
+    (userId, serverId) [pk]
+  }
+}
+
+Ref: Contest.serverId > Server.id
+
 Ref: Submission.authorId > User.id
 
 Ref: Submission.contestId > Contest.id
@@ -52,3 +75,7 @@ Ref: Submission.contestId > Contest.id
 Ref: ContestParticipants.userId > User.id
 
 Ref: ContestParticipants.contestId > Contest.id
+
+Ref: ServerUsers.userId > User.id
+
+Ref: ServerUsers.serverId > Server.id

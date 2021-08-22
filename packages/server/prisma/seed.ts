@@ -24,18 +24,27 @@ function randomUserData(): Prisma.UserCreateInput {
 const prisma = new PrismaClient();
 async function main() {
   console.log('Start seeding ...');
-  const users = [];
+  let users = [];
   for (let i = 0; i <= 50; ++i) {
-    users.push(
-      prisma.user.create({
-        data: randomUserData()
-      })
-    );
+    users.push(prisma.user.create({data: randomUserData()}));
   }
 
-  for (const user of await Promise.all(users)) {
-    console.log(`Created user with id: ${user.id}`);
-  }
+  users = (await Promise.all(users)).map(u => {
+    console.log(`Created user with id: ${u.id}`);
+    return u;
+  });
+
+  const server = await prisma.server.create({
+    data: {
+      discordId: faker.unique(faker.datatype.uuid),
+      users: {
+        create: users.map(u => {
+          return {user: {connect: {id: u.id}}}
+        })
+      }
+    }
+  });
+  console.log(`Created server with id: ${server.id}`);
 
   console.log('Seeding finished.');
 }

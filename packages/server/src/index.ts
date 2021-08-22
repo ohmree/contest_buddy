@@ -14,7 +14,15 @@ import * as dotenv from '@tinyhttp/dotenv';
 import Validator from 'fastest-validator';
 import {AppDiscord} from './discords/app-discord';
 import Conf from 'conf';
-import { GuildChannel } from 'discord.js';
+import {ironSession} from 'next-iron-session';
+import type {Session} from 'next-iron-session';
+import type {GuildChannel} from 'discord.js';
+
+declare module '@tinyhttp/app' {
+  export interface Request {
+    session: Session;
+  }
+}
 
 const {PrismaClient} = prisma_pkg;
 
@@ -82,10 +90,17 @@ async function main() {
     discordCategoryId = discordCategory.id;
   }
 
+  const session = ironSession({
+    cookieName: 'contest_buddy',
+    password: process.env['SECRET_COOKIE_PASSWORD']!,
+    cookieOptions: {
+      secure: process.env['NODE_ENV'] === 'production'
+    }
+  });
+
+
   // Frontend and API endpoint config.
   api
-    .use(helmet())
-    .use(cors())
     .use(async (request, response, next) => {
       if (
         request.headers['content-type'] === 'application/json' &&
@@ -162,48 +177,61 @@ async function main() {
       response.end();
     })
     .post('/contests', async (request, response) => {
-      const body: Record<string, any> =
-        (request.body as Record<string, any>) ?? {};
-      const validOrError = checkContest(body);
+      if (request.session.get('user')) {
+        const body: Record<string, any> =
+          (request.body as Record<string, any>) ?? {};
+        const validOrError = checkContest(body);
 
-      const name = body['name'] as string;
-      const description = body['description'] as string;
-      const isOpen = body['isOpen'] as boolean;
-      const picturesOnly = body['picturesOnly'] as boolean;
-      const maxSubmissions = body['maxSubmissions'] as number;
+        if (validOrError === true) {
+          const name = body['name'] as string;
+          const description = body['description'] as string;
+          const isOpen = body['isOpen'] as boolean;
+          const picturesOnly = body['picturesOnly'] as boolean;
+          const maxSubmissions = body['maxSubmissions'] as number;
 
-      if (validOrError === true) {
-        const participantIds: [string] = body['participantIds'] as [string];
-        const users = participantIds.map((id: string) => ({
-          user: {connect: {id}}
-        }));
-        const contest = await prisma.contest.create({
-          data: {
-            name,
-            description,
-            isOpen,
-            picturesOnly,
-            maxSubmissions,
-            participants: {
-              create: users
+
+          const participantIds: [string] = body['participantIds'] as [string];
+          const users = participantIds.map((id: string) => ({
+            user: {connect: {id}}
+          }));
+          const contest = await prisma.contest.create({
+            data: {
+              name,
+              description,
+              isOpen,
+              picturesOnly,
+              maxSubmissions,
+              participants: {
+                create: users
+              }
             }
+          });
+
+          // HACK: IDK how I feel about this.
+          if (discordCategory) {
+            discordGuild?.channels.create(contest.name, {parent: discordCategory})
           }
-        });
 
-        // HACK: IDK how I feel about this.
-        if (discordCategory) {
-          discordGuild?.channels.create(contest.name, {parent: discordCategory})
+          response.status(200).send(contest);
+        } else {
+          response.status(422).send({status: 422, errors: validOrError});
         }
-
-        response.status(200).send(contest);
       } else {
-        response.status(422).send({status: 422, errors: validOrError});
+        response.redirect('/api/unauthorized');
       }
 
       response.end();
+    })
+    .all('/unauthorized', (_request, response) => {
+      response.status(401).send({status: 401, errors: ['Unauthorized']})
     });
 
-  app.use(helmet()).use(logger()).use(cors()).use('/api', api);
+  app
+    .use(helmet())
+    .use(logger())
+    .use(cors())
+    .use(session)
+    .use('/api', api);
 
   if (isProd) {
     app.use(sirv(path.resolve(dirname, '../../client/dist')));
@@ -212,4 +240,4 @@ async function main() {
   app.listen(4000);
 }
 
-main().finally(async () => prisma.$disconnect());
+main().finally(async () => void await prisma.$disconnect());

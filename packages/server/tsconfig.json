@@ -5,6 +5,7 @@
       "ESNext",
       "ESNext.AsyncIterable"
     ],
+    "types": ["reflect-metadata"],
     "rootDir": ".",
     "outDir": "dist",
     "baseUrl": ".",
@@ -22,7 +23,8 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "shims.d.ts"
   ],
   "exclude": [
     "node_modules",

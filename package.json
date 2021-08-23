@@ -17,6 +17,17 @@
     },
     "overrides": [
       {
+        "files": "packages/*/src/**/*.ts{,x}",
+        "rules": {
+          "@typescript-eslint/dot-notation": [
+            "error",
+            {
+              "allowIndexSignaturePropertyAccess": true
+            }
+          ]
+        }
+      },
+      {
         "files": "packages/client/src/**/*.tsx",
         "rules": {
           "unicorn/prefer-module": "error"
